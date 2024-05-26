@@ -1,0 +1,102 @@
+//CoDeSys Mapping Export V1.2
+//Mapped variable,//Parameter name @ counter in device,//Unit,//Description,//IEC address,//Device name
+//Important: change only first, third or fourth column in Excel or add variable name before first
+,Holding Registers,,,%IW12,ModbusTCP_Slave_Device
+,Holding Registers[0],,,%IW12,ModbusTCP_Slave_Device
+Application.GVL.RobotKlossPickedUP,Bit0,,,%IX24.0,ModbusTCP_Slave_Device
+,Bit1,,,%IX24.1,ModbusTCP_Slave_Device
+,Bit2,,,%IX24.2,ModbusTCP_Slave_Device
+,Bit3,,,%IX24.3,ModbusTCP_Slave_Device
+,Bit4,,,%IX24.4,ModbusTCP_Slave_Device
+,Bit5,,,%IX24.5,ModbusTCP_Slave_Device
+,Bit6,,,%IX24.6,ModbusTCP_Slave_Device
+,Bit7,,,%IX24.7,ModbusTCP_Slave_Device
+,Bit8,,,%IX25.0,ModbusTCP_Slave_Device
+,Bit9,,,%IX25.1,ModbusTCP_Slave_Device
+,Bit10,,,%IX25.2,ModbusTCP_Slave_Device
+,Bit11,,,%IX25.3,ModbusTCP_Slave_Device
+,Bit12,,,%IX25.4,ModbusTCP_Slave_Device
+,Bit13,,,%IX25.5,ModbusTCP_Slave_Device
+,Bit14,,,%IX25.6,ModbusTCP_Slave_Device
+,Bit15,,,%IX25.7,ModbusTCP_Slave_Device
+,Holding Registers[1],,,%IW13,ModbusTCP_Slave_Device
+Application.GVL.HMIStart,Bit0@1,,,%IX26.0,ModbusTCP_Slave_Device
+Application.GVL.HMIStop,Bit1@1,,,%IX26.1,ModbusTCP_Slave_Device
+Application.GVL.HMIResetCountKnapp,Bit2@1,,,%IX26.2,ModbusTCP_Slave_Device
+Application.GVL.HMIResetAllCountersKnapp,Bit3@1,,,%IX26.3,ModbusTCP_Slave_Device
+Application.GVL.HMIBandFaster,Bit4@1,,,%IX26.4,ModbusTCP_Slave_Device
+Application.GVL.HMIBandSlower,Bit5@1,,,%IX26.5,ModbusTCP_Slave_Device
+Application.GVL.HMIStackStagKnapp,Bit6@1,,,%IX26.6,ModbusTCP_Slave_Device
+Application.GVL.HMIStackLineKnapp,Bit7@1,,,%IX26.7,ModbusTCP_Slave_Device
+Application.GVL.HMIStackQubeKnapp,Bit8@1,,,%IX27.0,ModbusTCP_Slave_Device
+,Bit9@1,,,%IX27.1,ModbusTCP_Slave_Device
+,Bit10@1,,,%IX27.2,ModbusTCP_Slave_Device
+,Bit11@1,,,%IX27.3,ModbusTCP_Slave_Device
+,Bit12@1,,,%IX27.4,ModbusTCP_Slave_Device
+,Bit13@1,,,%IX27.5,ModbusTCP_Slave_Device
+,Bit14@1,,,%IX27.6,ModbusTCP_Slave_Device
+,Bit15@1,,,%IX27.7,ModbusTCP_Slave_Device
+,Input Registers,,,%QW12,ModbusTCP_Slave_Device
+,Input Registers[0],,,%QW12,ModbusTCP_Slave_Device
+,Bit0@2,,,%QX24.0,ModbusTCP_Slave_Device
+,Bit1@2,,,%QX24.1,ModbusTCP_Slave_Device
+,Bit2@2,,,%QX24.2,ModbusTCP_Slave_Device
+,Bit3@2,,,%QX24.3,ModbusTCP_Slave_Device
+,Bit4@2,,,%QX24.4,ModbusTCP_Slave_Device
+,Bit5@2,,,%QX24.5,ModbusTCP_Slave_Device
+,Bit6@2,,,%QX24.6,ModbusTCP_Slave_Device
+,Bit7@2,,,%QX24.7,ModbusTCP_Slave_Device
+,Bit8@2,,,%QX25.0,ModbusTCP_Slave_Device
+,Bit9@2,,,%QX25.1,ModbusTCP_Slave_Device
+,Bit10@2,,,%QX25.2,ModbusTCP_Slave_Device
+,Bit11@2,,,%QX25.3,ModbusTCP_Slave_Device
+,Bit12@2,,,%QX25.4,ModbusTCP_Slave_Device
+,Bit13@2,,,%QX25.5,ModbusTCP_Slave_Device
+,Bit14@2,,,%QX25.6,ModbusTCP_Slave_Device
+,Bit15@2,,,%QX25.7,ModbusTCP_Slave_Device
+,Input Registers[1],,,%QW13,ModbusTCP_Slave_Device
+,Bit0@3,,,%QX26.0,ModbusTCP_Slave_Device
+,Bit1@3,,,%QX26.1,ModbusTCP_Slave_Device
+,Bit2@3,,,%QX26.2,ModbusTCP_Slave_Device
+,Bit3@3,,,%QX26.3,ModbusTCP_Slave_Device
+,Bit4@3,,,%QX26.4,ModbusTCP_Slave_Device
+,Bit5@3,,,%QX26.5,ModbusTCP_Slave_Device
+,Bit6@3,,,%QX26.6,ModbusTCP_Slave_Device
+,Bit7@3,,,%QX26.7,ModbusTCP_Slave_Device
+,Bit8@3,,,%QX27.0,ModbusTCP_Slave_Device
+,Bit9@3,,,%QX27.1,ModbusTCP_Slave_Device
+,Bit10@3,,,%QX27.2,ModbusTCP_Slave_Device
+,Bit11@3,,,%QX27.3,ModbusTCP_Slave_Device
+,Bit12@3,,,%QX27.4,ModbusTCP_Slave_Device
+,Bit13@3,,,%QX27.5,ModbusTCP_Slave_Device
+,Bit14@3,,,%QX27.6,ModbusTCP_Slave_Device
+,Bit15@3,,,%QX27.7,ModbusTCP_Slave_Device
+,Coils,,,%IB28,ModbusTCP_Slave_Device
+,Coils[0],,,%IB28,ModbusTCP_Slave_Device
+,Bit0@4,,,%IX28.0,ModbusTCP_Slave_Device
+,Bit1@4,,,%IX28.1,ModbusTCP_Slave_Device
+,Bit2@4,,,%IX28.2,ModbusTCP_Slave_Device
+,Bit3@4,,,%IX28.3,ModbusTCP_Slave_Device
+,Bit4@4,,,%IX28.4,ModbusTCP_Slave_Device
+,Bit5@4,,,%IX28.5,ModbusTCP_Slave_Device
+,Bit6@4,,,%IX28.6,ModbusTCP_Slave_Device
+,Bit7@4,,,%IX28.7,ModbusTCP_Slave_Device
+,Discrete Inputs,,,%QB28,ModbusTCP_Slave_Device
+,Discrete Inputs[0],,,%QB28,ModbusTCP_Slave_Device
+Application.GVL.RobotStop,Bit0@5,,,%QX28.0,ModbusTCP_Slave_Device
+Application.GVL.RobotKlossDetected,Bit1@5,,,%QX28.1,ModbusTCP_Slave_Device
+Application.GVL.RobotStackStag,Bit2@5,,,%QX28.2,ModbusTCP_Slave_Device
+Application.GVL.RobotStackLine,Bit3@5,,,%QX28.3,ModbusTCP_Slave_Device
+Application.GVL.RobotStackQube,Bit4@5,,,%QX28.4,ModbusTCP_Slave_Device
+Application.GVL.RobotResetLine,Bit5@5,,,%QX28.5,ModbusTCP_Slave_Device
+Application.GVL.RobotResetQube,Bit6@5,,,%QX28.6,ModbusTCP_Slave_Device
+Application.GVL.RobotExternalControl,Bit7@5,,,%QX28.7,ModbusTCP_Slave_Device
+,Discrete Inputs[1],,,%QB29,ModbusTCP_Slave_Device
+Application.GVL.HMIRunning,Bit0@6,,,%QX29.0,ModbusTCP_Slave_Device
+,Bit1@6,,,%QX29.1,ModbusTCP_Slave_Device
+,Bit2@6,,,%QX29.2,ModbusTCP_Slave_Device
+,Bit3@6,,,%QX29.3,ModbusTCP_Slave_Device
+,Bit4@6,,,%QX29.4,ModbusTCP_Slave_Device
+,Bit5@6,,,%QX29.5,ModbusTCP_Slave_Device
+,Bit6@6,,,%QX29.6,ModbusTCP_Slave_Device
+,Bit7@6,,,%QX29.7,ModbusTCP_Slave_Device
