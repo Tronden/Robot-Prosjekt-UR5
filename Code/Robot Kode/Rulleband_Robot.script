@@ -1,0 +1,2329 @@
+def Rulleband_Robot():
+  global _hidden_verificationVariable=0
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  set_target_payload(1.000000, [0.000000, 0.000000, 0.000000], [0.001539, 0.001539, 0.001539, 0.000000, 0.000000, 0.000000])
+  set_tcp(p[0.0,0.0,0.1506,0.0,0.0,0.0])
+  set_safety_mode_transition_hardness(1)
+  set_tool_communication(True, 1000000, 2, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(24)
+  modbus_add_signal("158.38.140.91", 255, 0, 0, "Stop", True)
+  modbus_set_signal_update_frequency("Stop", 10)
+  modbus_add_signal("158.38.140.91", 255, 1, 0, "BoxDetected", True)
+  modbus_set_signal_update_frequency("BoxDetected", 10)
+  modbus_add_signal("158.38.140.91", 255, 0, 3, "BoxPickedUp", True)
+  modbus_set_signal_update_frequency("BoxPickedUp", 10)
+  modbus_add_signal("158.38.140.91", 255, 2, 0, "StackStag", True)
+  modbus_set_signal_update_frequency("StackStag", 10)
+  modbus_add_signal("158.38.140.91", 255, 3, 0, "StackLine", True)
+  modbus_set_signal_update_frequency("StackLine", 10)
+  modbus_add_signal("158.38.140.91", 255, 4, 0, "StackQube", True)
+  modbus_set_signal_update_frequency("StackQube", 10)
+  modbus_add_signal("158.38.140.91", 255, 5, 0, "ResetLine", True)
+  modbus_set_signal_update_frequency("ResetLine", 10)
+  modbus_add_signal("158.38.140.91", 255, 6, 0, "ResetQube", True)
+  modbus_set_signal_update_frequency("ResetQube", 10)
+  modbus_add_signal("158.38.140.91", 255, 7, 0, "ExternalControl", True)
+  modbus_set_signal_update_frequency("ExternalControl", 10)
+  modbus_set_runstate_dependent_choice("BoxPickedUp",0)
+  set_gravity([0.0, 0.0, 9.82])
+  global Angles=[-0.82775, -1.74672, -1.16598, -1.03881, 1.56939, -0.06394]
+  global Angels_Deg=[-47.4268, -100.0799, -66.80597, -59.51915, 89.91956, -3.6637]
+  global PalletQube_2_cnt=1
+  global PalletQube_1_cnt=1
+  global PalletLine_1_cnt=1
+  global CountLine=0
+  global CountCube=12
+  global referencePoin_2=p[0.3971571833014898,0.13844872851588275,0.03573362011379949,1.1891447207932007,-2.8841140066112434,0.01200768619296738]
+  global referencePoint=p[0.49082117049561713,-0.018345367369810434,0.034428992029555766,-2.8754246033500124,1.19504446784966,-0.041343523208771916]
+  global separatorPoin_2=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  global separatorPoint=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  # begin: URCap Installation Node
+  #   Source: External Control, 1.0.5, FZI Research Center for Information Technology
+  #   Type: External Control
+  # end: URCap Installation Node
+  # begin: URCap Installation Node
+  #   Source: OnRobot, 6.0.2, OnRobot A/S
+  #   Type: OnRobot Setup
+  if (False):
+    global eyes_lmk_ok = 0
+    global eyes_workp_cnt = 0
+    global eyes_workp_pose = 0
+    global eyes_workp_type = 0
+    global twofg_Busy = 0
+    global twofg_Force = 0
+    global twofg_Grip_detected = 0
+    global twofg_Width_ext = 0
+    global twofg_Width_int = 0
+  end
+  ON_CONN_SHIFT_BOOL = 64
+  ON_CONN_SHIFT_INT = 24
+  ON_CONN_SHIFT_FLOAT = 24
+  ON_CONN_REG_SUM_BOOL = 0
+  ON_CONN_REG_SUM_INT = 1
+  ON_CONN_REG_SUM_FLOAT = 0
+  ON_TOOL_SHIFT_BOOL = 64
+  ON_TOOL_SHIFT_INT = 25
+  ON_TOOL_SHIFT_FLOAT = 24
+  ON_TOOL_SHIFT_BOOL_ARR = [64, 68, 68]
+  ON_TOOL_SHIFT_INT_ARR = [26, 30, 30]
+  ON_TOOL_SHIFT_FLOAT_ARR = [24, 26, 26]
+  ON_TOOL_REG_SUM_BOOL = 4
+  ON_TOOL_REG_SUM_INT = 5
+  ON_TOOL_REG_SUM_FLOAT = 2
+  ON_REGISTERS_SPEEDL_FLOAT = 0
+  ON_REG_USE_TOOL = True
+  ON_DI_SINGLE = 0
+  ON_DI_PRIMARY = 1
+  ON_DI_SECONDARY = 2
+  ON_DI_DUAL = 3
+  on_robot_type = 5
+  on_robot_cycle = 2.0
+  on_conn_ip = "158.38.140.101"
+  on_tool_ip = "localhost"
+  on_device_socket_port = 51234
+  on_conn_xmlrpc = rpc_factory("xmlrpc", "http://158.38.140.101:41414")
+  on_tool_xmlrpc = rpc_factory("xmlrpc", "http://localhost:41414")
+  on_RPC = rpc_factory("xmlrpc", "http://127.0.0.1:31416")
+  ON_DEBUG_LOG = False
+  on_isMetric = True
+  on_toolConnector = True
+  on_ioqc = False
+  on_dual = False
+  on_computebox = True
+  on_devices = 2
+  on_gripper = [False, False, False]
+  on_custom_tcp_id = "none"
+  on_custom_tcp_enabled = False
+  on_ft = False
+  twofg_index = 0
+  on_gripper[twofg_index] = True
+  #======    OnRobot Globals    ======#
+  
+  ON_MATH_PI=3.141593
+  ON_ZEROPOSE=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZEROFRAME=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZERO3D=[0.0,0.0,0.0]
+  ON_ZERO6D=[0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_ZERO8D=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+  ON_FALSE3D=[False,False,False]
+  ON_FALSE6D=[False,False,False,False,False,False]
+  ON_FALSE8D=[False,False,False,False,False,False,False,False]
+  global on_return=0
+  on_speedL=ON_ZERO6D
+  on_speedBase=ON_ZERO6D
+  on_speedVect=ON_ZERO6D
+  on_speedExtra=ON_ZERO6D
+  on_speedCB=ON_ZERO6D
+  on_speedGecko=ON_ZERO6D
+  on_RTDE_error=0
+  on_RTDE_tool_error=0
+  on_dataProcess_thrd=0
+  ON_DEVICE_ID_MISSING=0
+  ON_INIT_WATCHDOG_HZ=5
+  ON_INIT_TIMEOUT=2000
+  on_robot_TCP_offset=ON_ZEROFRAME
+  on_tcp_offset_actual=ON_ZEROFRAME
+  on_cog_actual=ON_ZEROFRAME
+  on_mass_actual=0.0
+  on_robot_mount=[0.0,0.0]
+  
+  #======    End of OnRobot Globals    ======#
+  #======    OnRobot CB Globals    ======#
+  
+  cb_dataRead_thrd=0
+  on_speedCB=ON_ZERO6D
+  
+  #======    End of OnRobot CB Globals    ======#
+  #======    OnRobot Eye Globals    ======#
+  
+  global eyes_workp_pose=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  global eyes_workp_type=-1
+  global eyes_workp_cnt=0
+  eyes_cnt=0
+  eyes_osd_cnt=0
+  global eyes_lmk_pose=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  eyes_lmk_ok=False
+  def get_eyes_workp_pose():
+  return eyes_workp_pose
+  end 
+  def get_eyes_workp_type():
+  return eyes_workp_type
+  end 
+  def get_eyes_workp_cnt():
+  return eyes_workp_cnt
+  end 
+  def get_eyes_cnt():
+  return eyes_cnt
+  end 
+  def get_eyes_lmk_pose():
+  return eyes_lmk_pose
+  end 
+  def get_eyes_lmk_ok():
+  return eyes_lmk_ok
+  end 
+  
+  #======    End of OnRobot Eye Globals    ======#
+  #======    OnRobot twofg Globals    ======#
+  
+  twofg_DEVICE_ID_twofg7=192
+  if ON_DEBUG_LOG:
+  textmsg("twofg Dual: False, Index: ",twofg_index)
+  if False:
+  twofg_index=-1
+  end 
+  end 
+  twofg_Width_ext_arr=[0,0,0]
+  twofg_Width_int_arr=[0,0,0]
+  twofg_Force_arr=[0,0,0]
+  twofg_device_id_arr=[0,0,0]
+  twofg_product_code_arr=[0,0,0]
+  twofg_Status_arr=[0,0,0]
+  twofg_Grip_detected_arr=[False,False,False]
+  twofg_Busy_arr=[False,False,False]
+  twofg_data_error_arr=[0,0,0]
+  twofg_fingertip_arr=[0,0,0]
+  twofg_Grip_guard_arr=[False,False,False]
+  
+  twofg_Width_ext=0
+  twofg_Width_int=0
+  twofg_Force=0
+  twofg_Busy=False
+  twofg_Grip_detected=False
+  def get_twofg_Busy():
+  return twofg_Busy
+  end 
+  def get_twofg_Width_ext():
+  return twofg_Width_ext
+  end 
+  def get_twofg_Width_int():
+  return twofg_Width_int
+  end 
+  def get_twofg_Grip_detected():
+  return twofg_Grip_detected
+  end 
+  def get_twofg_Force():
+  return twofg_Force
+  end 
+  
+  
+  #======    End of OnRobot twofg Globals    ======#
+  #======    OnRobot Interface Messages    ======#
+  
+  on_devices_primary_log="OnRobot Devices"
+  on_devices_secondary_log="OnRobot Secondary Device"
+  on_program_halted="<br>Program halted."
+  on_device_error_title="OnRobot - Device error"
+  on_install_error="OnRobot Setup is not correct.<br>Check the status in the OnRobot Setup page in the Installation Tab.<br>Program halted."
+  on_device_missing="No device connected.<br>Program halted."
+  cb_device_missing="No OnRobot Compute Box connected.<br>Program halted."
+  ft_device_missing="No OnRobot FT sensor or license detected.<br>Program halted."
+  hex_device_missing="No HEX sensor connected.<br>Program halted."
+  rg2ft_device_missing="No RG2-FT gripper connected.<br>Program halted."
+  rg_device_missing="No RG gripper connected.<br>Program halted."
+  vg_device_missing="No VG gripper connected.<br>Program halted."
+  gg_device_missing="No Gecko Gripper connected.<br>Program halted."
+  sg_device_missing="No Soft Gripper connected.<br>Program halted."
+  tfg_device_missing="No 3FG gripper connected.<br>Program halted."
+  sdr_device_missing="No OnRobot Sander connected.<br>Program halted."
+  twofg_device_missing="No 2FG gripper connected.<br>Program halted."
+  vgp_device_missing="No VGP gripper connected.<br>Program halted."
+  mg_device_missing="No Magnetic Gripper connected.<br>Program halted."
+  fgp_device_missing="No 2FGP20 Gripper connected.<br>Program halted."
+  eyes_device_missing="No OnRobot Eyes connected.<br>Program halted."
+  on_xmlrpc_start_ip="Connecting to OnRobot XML-RPC Server:"
+  on_java_comm_error_textmsg_title="OnRobot - Communication error:"
+  on_java_comm_controlsocket_open_error="Socket 'javaSocket' opening was unsuccessful."
+  on_java_comm_error_title="OnRobot - Communication error"
+  on_java_comm_socket_open_error="Establishing connection with the URCap was timed out.<br>Check the status in the OnRobot Setup page in the Installation Tab.<br>Program halted."
+  on_rtde_feed_error_textmsg_title="OnRobot - RTDE error:"
+  on_rtde_feed_error="RTDE feed error. OnRobot device count mismatch.<br>Program halted."
+  on_rtde_feed_tool_error="Tool RTDE feed error. OnRobot device count mismatch.<br>Program halted."
+  on_rtde_feed_open_error_textmsg="Socket 'rtdeFeed' opening was unsuccessful."
+  on_rtde_feed_error_title="OnRobot - RTDE error"
+  on_rtde_feed_count_error="Invalid RTDE offset setup detected. Please check RTDE Offsets at the OnRobot Setup page in the Installation Tab.<br>Program halted."
+  on_rtde_feed_open_error="Establishing connection with the devices was timed out.<br>Ensure that the OnRobot devices are operational, and check the status in the OnRobot Setup page in the Installation Tab."
+  
+  #======    End of OnRobot Interface Messages    ======#
+  #======    OnRobot Interface    ======#
+  
+  on_portopened_javaSocket=False
+  on_rtde_feed_opened=False
+  on_dataProcess_running=False
+  def on_missing():
+  popup(on_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def cb_missing():
+  popup(cb_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def ft_missing():
+  popup(ft_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def hex_missing():
+  popup(hex_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def rg2ft_missing():
+  popup(rg2ft_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def rg_missing():
+  popup(rg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def vg_missing():
+  popup(vg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def gg_missing():
+  popup(gg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def sg_missing():
+  popup(sg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def tfg_missing():
+  popup(tfg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def sdr_missing():
+  popup(sdr_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def twofg_missing():
+  popup(twofg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def vgp_missing():
+  popup(vgp_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def mg_missing():
+  popup(mg_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def fgp_missing():
+  popup(fgp_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def eyes_missing():
+  popup(eyes_device_missing,title=on_device_error_title,error=True,blocking=False)
+  halt
+  end 
+  def on_portclose_javaSocket():
+  socket_close("javaSocket")
+  on_portopened_javaSocket=False
+  end 
+  def on_portopen_javaSocket():
+  on_portclose_javaSocket()
+  on_portopened_javaSocket=socket_open("127.0.0.1",44005,"javaSocket")
+  if not on_portopened_javaSocket:
+  textmsg(on_java_comm_error_textmsg_title,on_java_comm_controlsocket_open_error)
+  popup(on_java_comm_socket_open_error,title=on_java_comm_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  on_conn_rtde_feed_name="rtdeFeedConn"
+  on_tool_rtde_feed_name="rtdeFeedTool"
+  def on_rtde_feed_close(rtdeFeedName):
+  socket_close(rtdeFeedName)
+  on_rtde_feed_opened=False
+  end 
+  def on_rtde_feed_open(deviceIP,rtdeFeedName,regStart,regSum,regSpeedl):
+  on_rtde_feed_close(rtdeFeedName)
+  if((regStart[0]+regSum[0])>128)or((regStart[1]+regSum[1])>48)or((regStart[2]+regSum[2])>48):
+  popup(on_rtde_feed_count_error,title=on_rtde_feed_error_title,error=True,blocking=False)
+  textmsg(str_cat("RegStart: ",regStart),str_cat("  -  RegSum: ",regSum))
+  halt
+  end 
+  on_rtde_feed_opened=socket_open(deviceIP,on_device_socket_port,rtdeFeedName)
+  if not on_rtde_feed_opened:
+  on_rtde_feed_opened=socket_open(deviceIP,on_device_socket_port,rtdeFeedName)
+  end 
+  if not on_rtde_feed_opened:
+  textmsg(on_rtde_feed_error_textmsg_title,on_rtde_feed_open_error_textmsg)
+  popup(on_rtde_feed_open_error,title=on_rtde_feed_error_title,error=True,blocking=False)
+  halt
+  end 
+  socket_send_int(regStart[0],rtdeFeedName)
+  socket_send_int(regSum[0],rtdeFeedName)
+  socket_send_int(regStart[1],rtdeFeedName)
+  socket_send_int(regSum[1],rtdeFeedName)
+  socket_send_int(regStart[2],rtdeFeedName)
+  socket_send_int(regSum[2],rtdeFeedName)
+  socket_send_int(regSpeedl,rtdeFeedName)
+  socket_send_int(on_devices,rtdeFeedName)
+  end 
+  def on_dataRead():
+  enter_critical
+  on_RTDE_error=read_input_integer_register(ON_CONN_SHIFT_INT)
+  if(ON_REG_USE_TOOL):
+  on_RTDE_tool_error=read_input_integer_register(ON_TOOL_SHIFT_INT_ARR[0])
+  end
+  exit_critical
+  end 
+  def on_set_rtde_watchdog(updateHz=ON_INIT_WATCHDOG_HZ):
+  local effect="stop"
+  if(updateHz<1):
+  effect="ignore"
+  end 
+  watchdog_conn_reg_str=str_cat("input_int_register_",ON_CONN_SHIFT_INT)
+  rtde_set_watchdog(watchdog_conn_reg_str,updateHz,effect)
+  if(ON_REG_USE_TOOL):
+  watchdog_tool_reg_str=str_cat("input_int_register_",ON_TOOL_SHIFT_INT_ARR[0])
+  rtde_set_watchdog(watchdog_tool_reg_str,updateHz,effect)
+  end 
+  if ON_DEBUG_LOG:
+  local update_str=str_cat(" "+effect+" watchdog set to [Hz]: ",updateHz)
+  textmsg(watchdog_conn_reg_str,update_str)
+  if(ON_REG_USE_TOOL):
+  local update_str=str_cat(" "+effect+" watchdog set to [Hz]: ",updateHz)
+  textmsg(watchdog_tool_reg_str,update_str)
+  end 
+  end 
+  end 
+  def on_speedCB_get():
+  return[on_speedCB[0],on_speedCB[1],on_speedCB[2],on_speedCB[3],on_speedCB[4],on_speedCB[5]]
+  end 
+  def on_speedGecko_get():
+  local speedExtra=ON_ZERO6D
+  if on_speedl_for_gecko:
+  speedExtra=[on_speedGecko[0],on_speedGecko[1],on_speedGecko[2],on_speedGecko[3],on_speedGecko[4],on_speedGecko[5]]
+  end 
+  return speedExtra
+  end 
+  def on_speedGecko_set(speedGecko):
+  on_speedGecko=[speedGecko[0],speedGecko[1],speedGecko[2],speedGecko[3],speedGecko[4],speedGecko[5]]
+  end 
+  thread on_dataProcess_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting on_dataRead thread")
+  end 
+  local error=False
+  on_dataProcess_running=True
+  sync()
+  while on_dataProcess_running:
+  sync()
+  on_dataRead()
+  error=on_error((on_RTDE_error<0),on_rtde_feed_error,on_rtde_feed_error_title,error)
+  error=on_error((ON_REG_USE_TOOL and(on_RTDE_tool_error<0)),on_rtde_feed_tool_error,on_rtde_feed_error_title,error)
+  on_dataProcess_running=not error
+  end 
+  if error:
+  halt
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping on_dataRead thread")
+  end 
+  end 
+  thread on_set_watchdog_thread():
+  sleep(2)
+  on_set_rtde_watchdog(updateHz=ON_INIT_WATCHDOG_HZ)
+  sleep(1/ON_INIT_WATCHDOG_HZ)
+  on_dataProcess_running=False
+  kill on_dataProcess_thrd
+  end 
+  
+  #======    End of OnRobot Interface    ======#
+  #======    OnRobot QC Setup Tool Connector    ======#
+  
+  def tc_setup_tool():
+  if ON_DEBUG_LOG:
+  textmsg("QC Setup Tool Connector start...")
+  end 
+  set_tool_voltage(24)
+  
+  set_tool_communication(True,1000000,2,1,1.5,3.5)
+  
+  if ON_DEBUG_LOG:
+  textmsg("QC Setup Tool Connector end.")
+  end 
+  end 
+  
+  #======    End of OnRobot QC Setup Tool Connector    ======#
+  
+  #======    End of OnRobot CB Interface Messages    ======#
+  #======    OnRobot CB Interface    ======#
+  
+  cb_dataRead_running=False
+  def cb_dataRead():
+  enter_critical
+  local axis=0
+  while(axis<6):
+  on_speedCB[axis]=read_input_float_register(ON_CONN_SHIFT_FLOAT+axis)
+  axis=axis+1
+  end 
+  exit_critical
+  end 
+  thread cb_dataRead_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting cb_dataRead thread")
+  end 
+  cb_dataRead_running=True
+  sync()
+  while cb_dataRead_running:
+  sync()
+  cb_dataRead()
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping cb_dataRead thread")
+  end 
+  end 
+  
+  #======    End of OnRobot CB Interface    ======#
+  
+  #======    End of OnRobot Eye Interface    ======#
+  #======    OnRobot twofg Interface    ======#
+  
+  twofg_dataRead_running=False
+  def twofg_dataRead_RTDE(tool_index):
+  local reg_offset_bool=ON_TOOL_SHIFT_BOOL_ARR[tool_index]
+  local reg_offset_int=ON_TOOL_SHIFT_INT_ARR[tool_index]
+  local reg_offset_float=ON_TOOL_SHIFT_FLOAT_ARR[tool_index]
+  enter_critical
+  floatRegDummy=read_input_float_register(reg_offset_float+0)
+  twofg_Width_ext_arr[tool_index]=floatRegDummy
+  floatRegDummy=read_input_float_register(reg_offset_float+1)
+  twofg_Width_int_arr[tool_index]=floatRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+0)
+  twofg_device_id_arr[tool_index]=intRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+1)
+  twofg_product_code_arr[tool_index]=intRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+2)
+  twofg_Status_arr[tool_index]=intRegDummy
+  intRegDummy=read_input_integer_register(reg_offset_int+3)
+  twofg_Force_arr[tool_index]=intRegDummy
+  boolRegDummy=read_input_boolean_register(reg_offset_bool+0)
+  twofg_Busy_arr[tool_index]=boolRegDummy
+  boolRegDummy=read_input_boolean_register(reg_offset_bool+1)
+  twofg_Grip_detected_arr[tool_index]=boolRegDummy
+  exit_critical
+  end 
+  thread twofg_dataRead_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting twofg_dataRead thread")
+  end 
+  while twofg_dataRead_running:
+  sync()
+  if(twofg_index==ON_DI_DUAL):
+  twofg_dataRead_RTDE(ON_DI_PRIMARY)
+  twofg_dataRead_RTDE(ON_DI_SECONDARY)
+  else:
+  twofg_dataRead_RTDE(twofg_index)
+  end 
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping twofg_dataRead thread")
+  end 
+  end 
+  
+  #======    End of OnRobot twofg Interface    ======#
+  #======    OnRobot TCP Messages    ======#
+  
+  on_tcp_log_msg_default="OnRobot: Robot TCP Offset set to:"
+  on_tcp_log_msg_primary="OnRobot: Robot TCP Offset set to Primary:"
+  on_tcp_log_msg_secondary="OnRobot: Robot TCP Offset set to Secondary:"
+  
+  #======    End of OnRobot TCP Messages    ======#
+  #======    OnRobot TCP    ======#
+  
+  on_tcp_offset_actual=ON_ZEROFRAME
+  on_tcp_offset_primary=ON_ZEROFRAME
+  on_tcp_static_primary=ON_ZEROFRAME
+  on_tcp_dynamic_primary=ON_ZEROFRAME
+  on_tcp_adapters=ON_ZEROFRAME
+  on_tcp_qc_primary=ON_ZEROFRAME
+  on_tcp_base_primary=ON_ZEROFRAME
+  on_tcp_gripper_static_primary=ON_ZEROFRAME
+  on_tcp_workpiece_primary=ON_ZEROFRAME
+  on_tcp_gripper_dynamic_primary=ON_ZEROFRAME
+  on_tcp_gripper_primary=ON_ZEROFRAME
+  on_tcp_offset_secondary=ON_ZEROFRAME
+  on_tcp_static_secondary=ON_ZEROFRAME
+  on_tcp_dynamic_secondary=ON_ZEROFRAME
+  on_tcp_qc_secondary=ON_ZEROFRAME
+  on_tcp_base_secondary=ON_ZEROFRAME
+  on_tcp_gripper_static_secondary=ON_ZEROFRAME
+  on_tcp_workpiece_secondary=ON_ZEROFRAME
+  on_tcp_gripper_dynamic_secondary=ON_ZEROFRAME
+  on_tcp_gripper_secondary=ON_ZEROFRAME
+  on_tcp_custom_preset_assigned=False
+  on_tcp_custom_preset=ON_ZEROFRAME
+  def on_tcp_init_adapters():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Adapters start..")
+  end 
+  enter_critical
+  on_tcp_adapters=ON_ZEROFRAME
+  local adapterCount=length(on_tcp_adapters_array)
+  local i=0
+  while(i<adapterCount):
+  on_tcp_adapters=pose_trans(on_tcp_adapters,on_tcp_adapters_array[i])
+  i=i+1
+  end
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Adapters end.")
+  end 
+  end 
+  def on_tcp_update_primary():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Primary start..")
+  end 
+  on_tcp_gripper_dynamic_primary=p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  enter_critical
+  on_tcp_dynamic_primary=pose_trans(on_tcp_static_primary,on_tcp_gripper_dynamic_primary)
+  on_tcp_offset_primary=pose_trans(on_tcp_dynamic_primary,on_tcp_workpiece_primary)
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Primary end.")
+  end 
+  end 
+  def on_tcp_init_primary():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Primary start..")
+  end 
+  enter_critical
+  on_tcp_base_primary=pose_trans(on_tcp_adapters,on_tcp_qc_primary)
+  on_tcp_static_primary=pose_trans(on_tcp_base_primary,on_tcp_gripper_static_primary)
+  exit_critical
+  on_tcp_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Primary end.")
+  end 
+  end 
+  def on_tcp_offset_set(TCP_offset):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset set started!")
+  end 
+  on_tcp_offset_send(TCP_offset)
+  if(on_follow_tcp):
+  set_tcp(TCP_offset)
+  end 
+  on_robot_TCP_offset=TCP_offset
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset set to: ",on_robot_TCP_offset)
+  end 
+  end 
+  def on_tcp_offset_forced_set_actual(isPrimary=True):
+  if(not on_follow_tcp):
+  
+  local tcp_log_msg=on_tcp_log_msg_default
+  
+  textmsg(tcp_log_msg,on_tcp_offset_actual)
+  set_tcp(on_tcp_offset_actual)
+  end 
+  end 
+  def on_tcp_update(isPrimary=True):
+  on_tcp_update_primary()
+  
+  on_tcp_set_actual_to(isPrimary)
+  end 
+  def on_tcp_set_actual_to(isPrimary=True):
+  
+  on_tcp_offset_actual=on_tcp_offset_primary
+  if(on_follow_tcp):
+  textmsg(on_tcp_log_msg_default,on_tcp_offset_actual)
+  end 
+  
+  on_tcp_active_is_primary=isPrimary
+  on_tcp_offset_set(on_tcp_offset_actual)
+  end 
+  def on_tcp_update_workpiece_primary(workpiece_offset):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool Primary start..")
+  end 
+  on_tcp_workpiece_primary=workpiece_offset
+  on_tcp_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool Primary end.")
+  end 
+  end 
+  def on_tcp_workpiece_rpy_get(xyz=[0.0,0.0,0.0],rpy=[0.0,0.0,0.0]):
+  local rotvec=rpy2rotvec(rpy)
+  local workpiece_offset=p[xyz[0],xyz[1],xyz[2],rotvec[0],rotvec[1],rotvec[2]]
+  return workpiece_offset
+  end 
+  
+  def on_tcp_update_workpiece(workpiece_offset,tool_index=0):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool start..")
+  end 
+  if(tool_index!=ON_DI_SECONDARY):
+  on_tcp_update_workpiece_primary(workpiece_offset)
+  local isPrimary=True
+  
+  end 
+  on_tcp_set_actual_to(isPrimary)
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Tool end.")
+  end 
+  end 
+  def on_get_tcp_for(tool_index):
+  if tool_index==ON_DI_SECONDARY:
+  local actual_tcp=on_tcp_static_secondary
+  else:
+  local actual_tcp=on_tcp_static_primary
+  end 
+  return actual_tcp
+  end 
+  def on_tcp_custom_unused():
+  return ON_ZEROFRAME
+  end 
+  def on_tcp_update_custom():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Custom start..")
+  end 
+  if(on_custom_tcp_enabled):
+  on_tcp_custom_unused()
+  on_tcp_custom_unused()
+  on_tcp_custom_unused()
+  on_tcp_custom_unused()
+  
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("TCP Update Custom end.")
+  end 
+  end 
+  
+  #======    End of OnRobot TCP    ======#
+  #======    OnRobot Payload Messages    ======#
+  
+  on_mass_log_msg="OnRobot: Robot Payload Mass set to:"
+  on_cog_log_msg="OnRobot: Robot Payload Center of Gravity set to:"
+  
+  #======    End of OnRobot Payload Messages    ======#
+  #======    OnRobot Payload    ======#
+  
+  on_cog_actual=ON_ZEROFRAME
+  on_mass_actual=0.0
+  on_cog_primary=ON_ZEROFRAME
+  on_cog_L1L2_primary=ON_ZEROFRAME
+  on_mass_primary=0.0
+  on_mass_L1L2_primary=0.0
+  on_cog_adapters=ON_ZEROFRAME
+  on_cog_qc_primary=ON_ZEROFRAME
+  on_cog_base_primary=ON_ZEROFRAME
+  on_cog_gripper_primary=ON_ZEROFRAME
+  on_cog_workpiece_primary=ON_ZEROFRAME
+  on_mass_adapters=0.0
+  on_mass_qc_primary=0.0
+  on_mass_base_primary=0.0
+  on_mass_gripper_primary=0.0
+  on_mass_workpiece_primary=0.0
+  on_cog_secondary=ON_ZEROFRAME
+  on_mass_secondary=0.0
+  on_cog_gripper_secondary=ON_ZEROFRAME
+  on_mass_gripper_secondary=0.0
+  on_cog_workpiece_secondary=ON_ZEROFRAME
+  on_mass_workpiece_secondary=0.0
+  ON_LB2KG001=0.45359237/100
+  def on_payload_init_adapters():
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Adapters start..")
+  end 
+  enter_critical
+  on_cog_adapters=ON_ZEROFRAME
+  on_mass_adapters=0.0
+  local massLAL0Ratio=0
+  local adapterAbsCOG=ON_ZEROFRAME
+  local tcp_adapter_offset=ON_ZEROFRAME
+  local adapterCount=length(on_tcp_adapters_array)
+  local i=0
+  while(i<adapterCount):
+  on_mass_adapters=on_mass_adapters+on_mass_adapters_array[i]
+  if(on_mass_adapters<=0):
+  massLAL0Ratio=0
+  else:
+  massLAL0Ratio=on_mass_adapters_array[i]/on_mass_adapters
+  end
+  adapterAbsCOG=pose_trans(tcp_adapter_offset,on_tcp_adapters_array[i])
+  adapterAbsCOG=p[adapterAbsCOG[0],adapterAbsCOG[1],adapterAbsCOG[2],0.0,0.0,0.0]
+  on_cog_adapters=interpolate_pose(on_cog_adapters,adapterAbsCOG,massLAL0Ratio)
+  on_cog_adapters=p[on_cog_adapters[0],on_cog_adapters[1],on_cog_adapters[2],0.0,0.0,0.0]
+  tcp_adapter_offset=pose_trans(tcp_adapter_offset,on_tcp_adapters_array[i])
+  i=i+1
+  sync()
+  end
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("TCP Init Adapters end.")
+  end 
+  end 
+  def on_payload_update_primary():
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Primary start..")
+  end 
+  enter_critical
+  on_mass_primary=on_mass_L1L2_primary+on_mass_workpiece_primary
+  local massL1L2L3Ratio=on_mass_workpiece_primary/on_mass_primary
+  local workpieceAbsCOG=pose_trans(on_tcp_dynamic_primary,on_cog_workpiece_primary)
+  workpieceAbsCOG=p[workpieceAbsCOG[0],workpieceAbsCOG[1],workpieceAbsCOG[2],0.0,0.0,0.0]
+  on_cog_primary=interpolate_pose(on_cog_L1L2_primary,workpieceAbsCOG,massL1L2L3Ratio)
+  on_cog_primary=p[on_cog_primary[0],on_cog_primary[1],on_cog_primary[2],0.0,0.0,0.0]
+  exit_critical
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Primary end.")
+  end 
+  end 
+  def on_payload_init_primary():
+  if ON_DEBUG_LOG:
+  textmsg("Payload Init Primary start..")
+  end 
+  enter_critical
+  on_mass_base_primary=on_mass_adapters+on_mass_qc_primary
+  local massL0L1Ratio=on_mass_qc_primary/on_mass_base_primary
+  on_mass_L1L2_primary=on_mass_base_primary+on_mass_gripper_primary
+  local massL1L2Ratio=on_mass_gripper_primary/on_mass_L1L2_primary
+  local qcAbsCOG=pose_trans(on_tcp_adapters,on_cog_qc_primary)
+  qcAbsCOG=p[qcAbsCOG[0],qcAbsCOG[1],qcAbsCOG[2],0.0,0.0,0.0]
+  on_cog_base_primary=interpolate_pose(on_cog_adapters,qcAbsCOG,massL0L1Ratio)
+  on_cog_base_primary=p[on_cog_base_primary[0],on_cog_base_primary[1],on_cog_base_primary[2],0.0,0.0,0.0]
+  local gripperAbsCOG=pose_trans(on_tcp_base_primary,on_cog_gripper_primary)
+  gripperAbsCOG=p[gripperAbsCOG[0],gripperAbsCOG[1],gripperAbsCOG[2],0.0,0.0,0.0]
+  on_cog_L1L2_primary=interpolate_pose(on_cog_base_primary,gripperAbsCOG,massL1L2Ratio)
+  on_cog_L1L2_primary=p[on_cog_L1L2_primary[0],on_cog_L1L2_primary[1],on_cog_L1L2_primary[2],0.0,0.0,0.0]
+  exit_critical
+  on_payload_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Init Primary end.")
+  end 
+  end 
+  def on_payload_update():
+  on_payload_update_primary()
+  
+  on_mass_actual =on_mass_primary
+  on_cog_actual=on_cog_primary
+  
+  on_payload_set_actual()
+  end 
+  def on_payload_set_actual():
+  
+  on_mass_actual =on_mass_primary
+  on_cog_actual=on_cog_primary
+  
+  local CoG=[on_cog_actual[0],on_cog_actual[1],on_cog_actual[2]]
+  on_payload_set(on_mass_actual,CoG)
+  end 
+  def on_payload_update_workpiece_primary(workpiece_mass=0,workpiece_cog=[0.0,0.0,0.0]):
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Workpiece Primary start..")
+  end 
+  on_cog_workpiece_primary=p[workpiece_cog[0],workpiece_cog[1],workpiece_cog[2],0.0,0.0,0.0]
+  on_mass_workpiece_primary=workpiece_mass
+  on_payload_update_primary()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Workpiece Primary end.")
+  end 
+  end 
+  def on_payload_set(mass,CoG):
+  if ON_DEBUG_LOG:
+  textmsg("Payload set started!")
+  end 
+  local center_of_gravity=[CoG[0],CoG[1],CoG[2]]
+  on_payload_send(center_of_gravity,mass)
+  if(on_isMetric):
+  local roundedMass=floor(mass*100+0.5)/100
+  else:
+  local roundedMass=floor(mass/ON_LB2KG001+0.5)*ON_LB2KG001
+  end 
+  set_payload(roundedMass,center_of_gravity)
+  on_mass_actual=roundedMass
+  on_cog_actual=p[CoG[0],CoG[1],CoG[2],0.0,0.0,0.0]
+  if ON_DEBUG_LOG:
+  textmsg("Payload mass, CoG set to: ",str_cat(str_cat(mass,", "),CoG))
+  end 
+  end 
+  
+  def on_payload_update_secondary():
+  end 
+  def on_payload_init_secondary():
+  end 
+  
+  def on_payload_update_workpiece(workpiece_mass,workpiece_cog=[0.0,0.0,0.0],tool_index=0):
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Workpiece start..")
+  end 
+  if(tool_index!=ON_DI_SECONDARY):
+  on_cog_workpiece_primary=p[workpiece_cog[0],workpiece_cog[1],workpiece_cog[2],0.0,0.0,0.0]
+  on_mass_workpiece_primary=workpiece_mass
+  else:
+  on_cog_workpiece_secondary=p[workpiece_cog[0],workpiece_cog[1],workpiece_cog[2],0.0,0.0,0.0]
+  on_mass_workpiece_secondary=workpiece_mass
+  end 
+  on_payload_update()
+  if ON_DEBUG_LOG:
+  textmsg("Payload Update Workpiece end.")
+  end 
+  end 
+  def on_payload_get_cog2tcp_workpiece(tool_index=0):
+  if(tool_index!=ON_DI_SECONDARY):
+  local cog_tool=[on_tcp_workpiece_primary[0],on_tcp_workpiece_primary[1],on_tcp_workpiece_primary[2]]
+  else:
+  local cog_tool=[on_tcp_workpiece_secondary[0],on_tcp_workpiece_secondary[1],on_tcp_workpiece_secondary[2]]
+  end 
+  return cog_tool
+  end 
+  
+  #======    End of OnRobot Payload    ======#
+  #======    OnRobot QC TCP    ======#
+  
+  onrobotmini=0
+  
+  
+  
+  #======    End of OnRobot QC TCP    ======#
+  #======    OnRobot FT TCP    ======#
+  
+  def on_tcp_offset_send(TCP_offset):
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset sending started!")
+  end 
+  local offset=[TCP_offset[0]*1000.0,TCP_offset[1]*1000.0,TCP_offset[2]*1000.0,TCP_offset[3],TCP_offset[4],TCP_offset[5]]
+  on_conn_xmlrpc.cb_tcp(offset)
+  on_robot_TCP_offset=TCP_offset
+  if ON_DEBUG_LOG:
+  textmsg("TCP Offset sent.")
+  end 
+  end 
+  def on_payload_send(CoG,mass):
+  if ON_DEBUG_LOG:
+  textmsg("Payload sending started!")
+  end 
+  local center_of_gravity=[CoG[0]*1000.0,CoG[1]*1000.0,CoG[2]*1000.0]
+  local mount=[on_robot_mount[0]*1000.0,on_robot_mount[1]*1000.0]
+  
+  on_robot_payload_cog=CoG
+  on_robot_payload_mass=mass
+  if ON_DEBUG_LOG:
+  textmsg("Payload sent.")
+  end 
+  end 
+  def cb_get_pose_as_array_mm(pose):
+  return[1000.0*pose[0],1000.0*pose[1],1000.0*pose[2],pose[3],pose[4],pose[5]]
+  end
+  
+  #======    End of OnRobot FT TCP    ======#
+  #======    OnRobot twofg TCP    ======#
+  
+  def twofg_payload_set(mass,tool_index=0,use_guard=False):
+  if ON_DEBUG_LOG:
+  textmsg("twofg Payload mass command starting..")
+  end 
+  if(tool_index==ON_DI_SECONDARY):
+  local cogTool=[on_cog_workpiece_secondary[0],on_cog_workpiece_secondary[1],on_cog_workpiece_secondary[2]]
+  else:
+  local cogTool=[on_cog_workpiece_primary[0],on_cog_workpiece_primary[1],on_cog_workpiece_primary[2]]
+  end 
+  if(twofg_Grip_detected_arr[tool_index]):
+  local mass2set=mass
+  twofg_Grip_guard_arr[tool_index]=use_guard and not on_ioqc
+  else:
+  local mass2set=0.0
+  twofg_Grip_guard_arr[tool_index]=False
+  end 
+  on_payload_update_workpiece(mass2set,cogTool,tool_index)
+  if ON_DEBUG_LOG:
+  textmsg("2FG Payload mass command ended.")
+  end 
+  end 
+  
+  #======    End of OnRobot twofg TCP    ======#
+  #======    OnRobot  Speedl    ======#
+  
+  on_speedl_thread_handler=0
+  on_speedl_is_enabled=False
+  on_speedl_is_running=False
+  on_speedl_acc=0.0
+  ft_speedl_hg_caranteen_reached=False
+  ft_speedl_hg_caranteen_safemode=False
+  on_speedl_for_ftcontrol=False
+  on_speedl_for_move=False
+  on_speedl_for_handguide=False
+  on_speedl_for_insertpart=False
+  on_speedl_for_depthcompensation=False
+  on_speedl_for_center=False
+  on_speedl_for_gecko=False
+  on_speedl_acc=10000.0 
+  on_speedl_acc_to_zero=3.0 
+  ON_SPEEDL_FTCONTROL=1
+  ON_SPEEDL_HANDGUIDE=2
+  ON_SPEEDL_TRAJECTORY=3
+  ON_SPEEDL_MOVE=ON_SPEEDL_TRAJECTORY
+  ON_SPEEDL_INSERTPART=4
+  ON_SPEEDL_DEPTHCOMP=5
+  ON_SPEEDL_CENTER=6
+  ON_SPEEDL_GECKO=7
+  def on_wait_ms(time_ms):
+  local sync_time=ceil(norm(time_ms/2.0))
+  while(sync_time>0):
+  sync_time=sync_time-1
+  sync()
+  end
+  end 
+  def on_error(status_flag,message,title,stop_var=False):
+  if(status_flag):
+  popup(message,title=title,error=True,blocking=False)
+  stop_var=True
+  end 
+  return stop_var
+  end 
+  def on_warning(status_flag,message,title,isPopupNeeded=False,is_shown=False):
+  if(status_flag):
+  if(not is_shown):
+  if(isPopupNeeded):
+  popup(message,title=title,warning=True,blocking=False)
+  else:
+  textmsg(title+": ",message)
+  end 
+  is_shown=True
+  end 
+  else:
+  is_shown=False
+  end 
+  return is_shown
+  end 
+  def on_speedl_add_extra(speedBase,speedExtra):
+  speedSum=ON_ZERO6D
+  speedBaseP=p[speedBase[0],speedBase[1],speedBase[2],speedBase[3],speedBase[4],speedBase[5]]
+  speedExtraP=p[speedExtra[0],speedExtra[1],speedExtra[2],speedExtra[3],speedExtra[4],speedExtra[5]]
+  speedSumP=pose_add(speedExtraP,speedBaseP)
+  speedSum=[speedSumP[0],speedSumP[1],speedSumP[2],speedSumP[3],speedSumP[4],speedSumP[5]]
+  return speedSum
+  end 
+  
+  thread on_speedl_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread started..")
+  end 
+  enter_critical
+  on_speedl_is_running=True
+  on_speedl_is_enabled=True
+  exit_critical
+  on_speedL=ON_ZERO6D
+  on_speedL_last=ON_ZERO6D
+  
+  while on_speedl_is_running:
+  on_speedBase=on_speedCB_get()
+  on_speedL=on_speedBase
+  
+  
+  if on_speedl_is_enabled:
+  if(on_speedL==ON_ZERO6D):
+  on_speedL=[on_speedL_last[0]/100,on_speedL_last[1]/100,on_speedL_last[2]/100,on_speedL_last[3]/100,on_speedL_last[4]/100,on_speedL_last[5]/100]
+  end
+  speedl(on_speedL,a=on_speedl_acc,t=0.001)
+  else:
+  speedl(ON_ZERO6D,a=on_speedl_acc_to_zero,t=0.001)
+  end 
+  on_speedL_last=on_speedL
+  end 
+  
+  on_speedL=ON_ZERO6D
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread ended.")
+  end 
+  end 
+  def on_speedl_integer_get():
+  local speedl_integer=binary_list_to_integer([on_speedl_for_ftcontrol,on_speedl_for_handguide,on_speedl_for_move,on_speedl_for_insertpart,on_speedl_for_depthcompensation,on_speedl_for_center,on_speedl_for_gecko])
+  return speedl_integer
+  end 
+  def on_speedl_start_for(speedl_id):
+  if(speedl_id==ON_SPEEDL_FTCONTROL):
+  on_speedl_for_ftcontrol=True
+  elif(speedl_id==ON_SPEEDL_HANDGUIDE):
+  on_speedl_for_handguide=True
+  elif(speedl_id==ON_SPEEDL_TRAJECTORY):
+  on_speedl_for_move=True
+  elif(speedl_id==ON_SPEEDL_INSERTPART):
+  on_speedl_for_insertpart=True
+  elif(speedl_id==ON_SPEEDL_DEPTHCOMP):
+  on_speedl_for_depthcompensation=True
+  elif(speedl_id==ON_SPEEDL_CENTER):
+  on_speedl_for_center=True
+  elif(speedl_id==ON_SPEEDL_GECKO):
+  on_speedl_for_gecko=True
+  else:
+  textmsg("Unknown Start speedl ID received: ",speedl_id)
+  end 
+  local speedl_integer=on_speedl_integer_get()
+  if not(speedl_integer==0):
+  if not on_speedl_is_running:
+  on_speedl_thread_handler=run on_speedl_thread()
+  end 
+  end 
+  return on_speedl_is_running
+  end 
+  def on_speedl_stop_for(speedl_id,brake=10,brakeRot=10):
+  if(speedl_id==ON_SPEEDL_FTCONTROL):
+  on_speedl_for_ftcontrol=False
+  elif(speedl_id==ON_SPEEDL_HANDGUIDE):
+  on_speedl_for_handguide=False
+  elif(speedl_id==ON_SPEEDL_TRAJECTORY):
+  on_speedl_for_move=False
+  elif(speedl_id==ON_SPEEDL_INSERTPART):
+  on_speedl_for_insertpart=False
+  elif(speedl_id==ON_SPEEDL_DEPTHCOMP):
+  on_speedl_for_depthcompensation=False
+  elif(speedl_id==ON_SPEEDL_CENTER):
+  on_speedl_for_center=False
+  elif(speedl_id==ON_SPEEDL_GECKO):
+  on_speedl_for_gecko=False
+  on_speedGecko_set(ON_ZERO6D)
+  else:
+  textmsg("Unknown Stop speedl ID received: ",speedl_id)
+  end 
+  local speedl_integer=on_speedl_integer_get()
+  if(speedl_integer==0):
+  if(on_speedl_is_running):
+  kill on_speedl_thread_handler
+  enter_critical
+  on_speedl_is_running=False
+  exit_critical
+  
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Speedl thread stopped")
+  end 
+  stopl(brake,brakeRot)
+  end 
+  return on_speedl_is_running
+  end 
+  def on_speedl_pause():
+  on_speedl_is_enabled=False
+  return on_speedl_integer_get()
+  end 
+  def on_speedl_resume():
+  on_speedl_is_enabled=True
+  return on_speedl_integer_get()
+  end 
+  
+  #======    End of OnRobot  Speedl    ======#
+  
+  #======    End of OnRobot Eye Engine    ======#
+  #======    OnRobot TwoFG Engine Messages    ======#
+  
+  twofg_error_title="OnRobot - 2FG error"
+  twofg_device_id_waiting="Waiting for valid OnRobot 2FG ID..."
+  twofg_device_id_timeout="Waiting for valid OnRobot 2FG ID timed out.<br>Program halted."
+  twofg_data_error_title="OnRobot - 2FG Data error"
+  twofg_data_error_type="No or unknown Gripper connected."
+  twofg_data_warning_title="OnRobot - 2FG Data warning:"
+  twofg_status_error_title="OnRobot - 2FG Status error"
+  twofg_status_error_missing="Communication problem with an 2FG gripper. Please check the device.<br>Program halted."
+  twofg_else_error="Unknown error code:"
+  twofg_status_msg_single="2FG status:"
+  twofg_data_error_bit0_single="Wrong size of float data received."
+  twofg_data_error_bit1_single="Wrong size of integer data received."
+  twofg_data_error_bit2_single="Wrong size of boolean data received."
+  twofg_status_msg_primary="2FG Primary status:"
+  twofg_data_error_bit0_primary="Wrong size of float data received for Primary 2FG."
+  twofg_data_error_bit1_primary="Wrong size of integer data received for Primary 2FG."
+  twofg_data_error_bit2_primary="Wrong size of boolean data received for Primary 2FG."
+  twofg_status_msg_secondary="2FG Secondary status:"
+  twofg_data_error_bit0_secondary="Wrong size of float data received for Secondary 2FG."
+  twofg_data_error_bit1_secondary="Wrong size of integer data received for Secondary 2FG."
+  twofg_data_error_bit2_secondary="Wrong size of boolean data received for Secondary 2FG."
+  
+  #======    End of OnRobot TwoFG Engine Messages    ======#
+  #======    OnRobot TwoFG Engine    ======#
+  
+  twofg_dataProcess_running=False
+  twofg_start_flange=ON_ZEROPOSE
+  twofg_start_pose=ON_ZEROPOSE
+  twofg_status_warning_title=str_cat(twofg_status_error_title,": ")
+  def twofg_dataProcess_status_errors(twofg_stop=False):
+  enter_critical
+  local tool_index=twofg_index
+  if(tool_index==ON_DI_DUAL):
+  tool_index=ON_DI_SECONDARY
+  twofg_stop=on_error((twofg_device_id_arr[tool_index]!=tool_index),twofg_status_error_missing,twofg_status_error_title,twofg_stop)
+  twofg_stop=on_error((twofg_product_code_arr[tool_index]==ON_DEVICE_ID_MISSING),twofg_status_error_missing,twofg_status_error_title,twofg_stop)
+  tool_index=ON_DI_PRIMARY
+  end 
+  twofg_stop=on_error((twofg_device_id_arr[tool_index]!=tool_index),twofg_status_error_missing,twofg_status_error_title,twofg_stop)
+  twofg_stop=on_error((twofg_product_code_arr[tool_index]==ON_DEVICE_ID_MISSING),twofg_status_error_missing,twofg_status_error_title,twofg_stop)
+  
+  
+  exit_critical
+  return twofg_stop
+  end 
+  def twofg_dataProcess():
+  enter_critical
+  local tool_index=twofg_index
+  if tool_index==ON_DI_DUAL:
+  twofg_Width_ext_primary=twofg_Width_ext_arr[ON_DI_PRIMARY]
+  twofg_Width_int_primary=twofg_Width_int_arr[ON_DI_PRIMARY]
+  twofg_Force_primary =twofg_Force_arr[ON_DI_PRIMARY]
+  twofg_Busy_primary=twofg_Busy_arr[ON_DI_PRIMARY]
+  twofg_Grip_detected_primary=twofg_Grip_detected_arr[ON_DI_PRIMARY]
+  twofg_Width_ext_secondary=twofg_Width_ext_arr[ON_DI_SECONDARY]
+  twofg_Width_int_secondary=twofg_Width_int_arr[ON_DI_SECONDARY]
+  twofg_Force_secondary =twofg_Force_arr[ON_DI_SECONDARY]
+  twofg_Busy_secondary=twofg_Busy_arr[ON_DI_SECONDARY]
+  twofg_Grip_detected_secondary=twofg_Grip_detected_arr[ON_DI_SECONDARY]
+  else:
+  twofg_Width_ext=twofg_Width_ext_arr[tool_index]
+  twofg_Width_int=twofg_Width_int_arr[tool_index]
+  twofg_Force =twofg_Force_arr[tool_index]
+  twofg_Busy=twofg_Busy_arr[tool_index]
+  twofg_Grip_detected=twofg_Grip_detected_arr[tool_index]
+  end 
+  exit_critical
+  end 
+  thread twofg_dataProcess_thread():
+  if ON_DEBUG_LOG:
+  textmsg("Starting twofg_dataProcess thread")
+  end 
+  while twofg_dataProcess_running:
+  sync()
+  local twofg_stop=False
+  twofg_stop=twofg_dataProcess_status_errors(twofg_stop)
+  if twofg_stop:
+  halt
+  end 
+  twofg_dataProcess()
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("Stopping twofg_dataProcess thread")
+  end 
+  end 
+  def twofg_index_get():
+  return twofg_index
+  end 
+  
+  #======    End of OnRobot TwoFG Engine    ======#
+  textmsg(on_devices_primary_log, ": Eyes + Quick Changer + 2FG7 + [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]")
+  on_follow_tcp = True
+  on_tcp_active_is_primary = True
+  on_tcp_adapters_array = [p[0.0, 0.0, 0.012, 0.0, 0.0, 0.0]]
+  on_cog_adapters_array = [p[0.0, 0.0, 0.004, 0.0, 0.0, 0.0]]
+  on_mass_adapters_array = [0.282]
+  on_tcp_qc_primary = p[0.0, 0.0, 0.0136, 0.0, 0.0, 0.0]
+  on_cog_qc_primary = p[0.0, 0.0, 0.004, 0.0, 0.0, 0.0]
+  on_mass_qc_primary = 0.06
+  on_tcp_gripper_static_primary = p[0.0, 0.0, 0.125, 0.0, 0.0, 0.0]
+  on_cog_gripper_primary = p[0.000, 0.000, 0.052, 0.0, 0.0, 0.0]
+  on_mass_gripper_primary = 1.14
+  on_tcp_workpiece_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  on_cog_workpiece_primary = p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  on_mass_workpiece_primary = 0.0
+  #======    OnRobot  Messages    ======#
+  
+  cb_io_index_out_of_range_message="Error trying to perform ComputeBox IO operation."
+  cb_index_out_of_range_message_title="OnRobot - Index out of range"
+  
+  #======    End of OnRobot  Messages    ======#
+  #======    OnRobot     ======#
+  
+  def cb_get_digital_input(input):
+  if input<1 or input>8:
+  popup(cb_io_index_out_of_range_message,cb_index_out_of_range_message_title,error=True,blocking=False)
+  halt
+  end
+  local inputs=on_conn_xmlrpc.cb_get_digital_inputs()
+  local inputValue=(floor(inputs/pow(2,input-1)))%2 
+  return inputValue
+  end
+  
+  #======    End of OnRobot     ======#
+  #======    OnRobot Eye EyeLocate    ======#
+  
+  eyes_time_limit=0
+  eyes_time_counter_running=False
+  eyes_timed_out=False
+  thread eyes_time_counter_thread():
+  local time=0
+  while eyes_time_counter_running and(time<eyes_time_limit):
+  sleep(0.01)
+  time=time+0.01
+  end 
+  eyes_timed_out=True
+  end 
+  def eyes_locate(program_id,locate_limit=0):
+  local result=-1
+  local using_time_limit=locate_limit>0 
+  eyes_timed_out=False
+  if using_time_limit:
+  eyes_time_counter_running=True
+  eyes_time_limit=locate_limit
+  sync()
+  time_thread=run eyes_time_counter_thread()
+  sync()
+  end 
+  while True:
+  result=on_conn_xmlrpc.eye_run_process(program_id,get_actual_tool_flange_pose(),1)
+  if(result>0):
+  if using_time_limit:
+  eyes_time_counter_running=False 
+  join time_thread 
+  kill time_thread
+  end 
+  break
+  end 
+  if eyes_timed_out:
+  kill time_thread
+  break
+  end
+  if locate_limit==-1:
+  break
+  end
+  end 
+  return result
+  end 
+  def eyes_getworkpiecepose(workpiece_type):
+  local result=on_conn_xmlrpc.eye_get_valid_object(0,workpiece_type)
+  return result
+  end 
+  def eyes_getworkpiececount():
+  local result=on_conn_xmlrpc.eye_get_workpiece_count()
+  return result
+  end 
+  def eyes_getworkpiecetype():
+  local result=on_conn_xmlrpc.eye_get_workpiece_type()
+  return result
+  end 
+  def eyes_test_pick(program_id,workpiece_type):
+  local result=eyes_locate(program_id,-1)
+  if(result>0):
+  local workpiece_pose=eyes_getworkpiecepose(workpiece_type)
+  if(pose_dist(workpiece_pose,p[0,0,0,0,0,0])>0.005):
+  local initial_pose=get_actual_tool_flange_pose()
+  local approach_pose=pose_trans(workpiece_pose,p[0,0,-0.1,0,0,0])
+  movej(approach_pose,a=1.3962634015954636,v=1.0471975511965976)
+  movel(workpiece_pose,a=1.2,v=0.25)
+  movel(approach_pose,a=1.2,v=0.25)
+  set_tcp(p[0,0,0,0,0,0])
+  movej(initial_pose,a=1.3962634015954636,v=1.0471975511965976)
+  end
+  end
+  on_conn_xmlrpc.eye_start_process(program_id)
+  end
+  def eyes_getcamviewpose(program_id):
+  local result=on_conn_xmlrpc.eye_get_cameraview_pose(program_id,1)
+  return result
+  end 
+  def eyes_move_to_camera_view(program_id,acceleration,speed):
+  eyes_cv_pose=eyes_getcamviewpose(program_id)
+  if pose_dist(eyes_cv_pose,p[0,0,0,0,0,0])>0.005:
+  local initialTcp=get_tcp_offset()
+  set_tcp(p[0,0,0,0,0,0])
+  movej(eyes_cv_pose,a=acceleration,v=speed)
+  set_tcp(initialTcp)
+  end
+  end
+  
+  #======    End of OnRobot Eye EyeLocate    ======#
+  #======    OnRobot Eye EyeLocate Messages    ======#
+  
+  eyes_locate_message_title="OnRobot - Eyes Locate"
+  eyes_locate_message_1="Error running the selected program."
+  eyes_locate_message_2="Error retrieving the latest valid pose of the workpiece."
+  eyes_locate_message_3="Error retrieving the number of detected workpieces."
+  
+  #======    End of OnRobot Eye EyeLocate Messages    ======#
+  #======    OnRobot Eye EyeSendPose    ======#
+  
+  def eyes_sendrobotpose():
+  local result=on_conn_xmlrpc.eye_calibrate(get_actual_tool_flange_pose(),1)
+  local result2=on_conn_xmlrpc.eye_set_cameraview_pose(get_actual_tool_flange_pose(),1)
+  return(result and result2)
+  end 
+  
+  #======    End of OnRobot Eye EyeSendPose    ======#
+  #======    OnRobot Eye EyePick Messages    ======#
+  
+  eyes_pick_message_title="OnRobot - Eyes Pick"
+  eyes_pick_message_1="The selected pose is invalid, skipping Eyes Pick."
+  
+  #======    End of OnRobot Eye EyePick Messages    ======#
+  #======    OnRobot Eye EyeInspect    ======#
+  
+  def eyes_inspect(program_id,inspect_limit=0):
+  return eyes_locate(program_id,inspect_limit)
+  end
+  def eyes_getworkpiecematch():
+  local result=on_conn_xmlrpc.eye_get_workpiece_inspection_match_percentage()
+  return result
+  end 
+  def eyes_getworkpieceeval():
+  local result=on_conn_xmlrpc.eye_get_workpiece_inspection_eval()
+  return result
+  end 
+  
+  #======    End of OnRobot Eye EyeInspect    ======#
+  #======    OnRobot Eye EyeLandmark    ======#
+  
+  def eyes_landmark_nofeature():
+  popup(eyes_landmark_no_feature_selected_msg,title=eyes_landmark_message_title,error=True,blocking=False)
+  halt
+  end 
+  def eyes_landmarkdetect():
+  local result=-1
+  local pose=p[0,0,0,0,0,0]
+  result=on_conn_xmlrpc.eye_run_process(255,get_actual_tool_flange_pose(),1)
+  eyes_lmk_ok=result!=-1
+  if(eyes_lmk_ok):
+  pose=on_conn_xmlrpc.eye_get_valid_object(0,0)
+  else:
+  end
+  return pose
+  end 
+  
+  #======    End of OnRobot Eye EyeLandmark    ======#
+  #======    OnRobot Eye Landmark Messages    ======#
+  
+  eyes_landmark_message="Error detecting the landmark."
+  eyes_landmark_message_title="OnRobot - Eyes Landmark"
+  eyes_landmark_no_feature_selected_msg="Error detecting the landmark."
+  
+  #======    End of OnRobot Eye Landmark Messages    ======#
+  #======    OnRobot TwoFG Width Messages    ======#
+  
+  twofg_grip_title="OnRobot - 2FG Grip"
+  twofg_grip_return_error_n1="twofg command returned with error.<br>Please be sure that the required width is between the limits.<br>Program halted."
+  twofg_grip_return_error_n2="twofg Grip command did not apply the force at the end.<br>Program halted."
+  
+  #======    End of OnRobot TwoFG Width Messages    ======#
+  #======    OnRobot twofg Width command twofg_grip    ======#
+  
+  twofg__grip_param_warning_width="The parameter 'diameter' is out of the limits. Limited value sent: "
+  twofg__grip_param_warning_force="The parameter 'force' is out of the limits. Limited value sent: "
+  def twofg_grip(width,force,speed,external_grip=True,tool_index=0,blocking=True):
+  if ON_DEBUG_LOG:
+  textmsg("twofg Grip start..")
+  end 
+  local retVal=0
+  twofg_Grip_guard_arr[tool_index]=False
+  sync()
+  if(tool_index==ON_DI_SECONDARY):
+  local isPrimary=False
+  else:
+  local isPrimary=True
+  end 
+  if(on_follow_tcp):
+  on_tcp_set_actual_to(isPrimary)
+  end 
+  sync()
+  if external_grip:
+  retVal=on_tool_xmlrpc.twofg_grip_external(tool_index,width+0.0,force,speed)
+  else:
+  retVal=on_tool_xmlrpc.twofg_grip_internal(tool_index,width+0.0,force,speed)
+  end 
+  if(retVal!=0):
+  popup(twofg_grip_return_error_n1,twofg_grip_title,error=True,blocking=False)
+  halt
+  end 
+  if blocking:
+  local timeout=0
+  while not twofg_Busy_arr[tool_index]:
+  sleep(0.008)
+  timeout=timeout+1
+  if timeout>20:
+  break
+  end 
+  end 
+  while(twofg_Busy_arr[tool_index]==True):
+  sync()
+  end 
+  end 
+  if(on_follow_tcp):
+  on_tcp_update(isPrimary)
+  end 
+  if ON_DEBUG_LOG:
+  textmsg("2FG Grip ended.")
+  end 
+  return retVal
+  end 
+  twofg_release_force=80
+  def twofg_release(width,speed,external_release=True,tool_index=0,blocking=True):
+  local retVal=0
+  retVal=twofg_grip(width,twofg_release_force,speed,external_release,tool_index,blocking)
+  return retVal
+  end 
+  def twofg_grip_ext(width,force,speed,tool_index=0):
+  local retVal=twofg_grip(width,force,speed,True,tool_index,True)
+  return retVal
+  end 
+  def twofg_grip_int(width,force,speed,tool_index=0):
+  local retVal=twofg_grip(width,force,speed,False,tool_index,True)
+  return retVal
+  end 
+  def twofg_release_ext(width,speed,tool_index=0):
+  local retVal=twofg_release(width,speed,True,tool_index,True)
+  return retVal
+  end 
+  def twofg_release_int(width,speed,tool_index=0):
+  local retVal=twofg_release(width,speed,False,tool_index,True)
+  return retVal
+  end 
+  
+  #======    End of OnRobot twofg Width command twofg_grip    ======#
+  #======    OnRobot VG Monitor Messages    ======#
+  
+  twofg_monitor_error_title="OnRobot - 2FG Grip lost"
+  twofg_monitor_grip_lost_error="Grip lost detected.<br>Program halted."
+  
+  #======    End of OnRobot VG Monitor Messages    ======#
+  #======    OnRobot twofg Monitor    ======#
+  
+  thread twofg_monitor_thread():
+  while True:
+  sync()
+  local twofg_error=False
+  if(twofg_index==ON_DI_DUAL):
+  local tool_index=ON_DI_SECONDARY
+  twofg_error=twofg_monitor_check(tool_index)
+  local tool_index=ON_DI_PRIMARY
+  else:
+  local tool_index=twofg_index
+  end 
+  twofg_error=twofg_error or twofg_monitor_check(tool_index)
+  if twofg_error:
+  halt
+  end 
+  end 
+  end 
+  def twofg_monitor_check(tool_index=0):
+  local error=False
+  if twofg_Grip_guard_arr[tool_index]and not twofg_Grip_detected_arr[tool_index]:
+  popup(twofg_monitor_grip_lost_error,title=twofg_monitor_error_title,error=True,blocking=False)
+  twofg_payload_set(0,tool_index=tool_index)
+  error=True
+  end 
+  return error
+  end 
+  
+  #======    End of OnRobot twofg Monitor    ======#
+  #======    OnRobot Run    ======#
+  
+  on_portopen_javaSocket()
+  sync()
+  textmsg(on_xmlrpc_start_ip,on_conn_ip)
+  if(ON_REG_USE_TOOL):
+  on_regStart_conn=[ON_CONN_SHIFT_BOOL,ON_CONN_SHIFT_INT,ON_CONN_SHIFT_FLOAT]
+  on_regSum_conn=[ON_CONN_REG_SUM_BOOL,ON_CONN_REG_SUM_INT,ON_CONN_REG_SUM_FLOAT]
+  on_rtde_feed_open(on_conn_ip,on_conn_rtde_feed_name,on_regStart_conn,on_regSum_conn,ON_REGISTERS_SPEEDL_FLOAT)
+  sync()
+  textmsg(on_xmlrpc_start_ip,on_tool_ip)
+  on_regStart_tool=[ON_TOOL_SHIFT_BOOL,ON_TOOL_SHIFT_INT,ON_TOOL_SHIFT_FLOAT]
+  on_regSum_tool=[ON_TOOL_REG_SUM_BOOL,ON_TOOL_REG_SUM_INT,ON_TOOL_REG_SUM_FLOAT]
+  on_rtde_feed_open(on_tool_ip,on_tool_rtde_feed_name,on_regStart_tool,on_regSum_tool,0)
+  sync()
+  else:
+  on_regStart_conn=[ON_CONN_SHIFT_BOOL,ON_CONN_SHIFT_INT,ON_CONN_SHIFT_FLOAT]
+  on_regSum_conn=[ON_CONN_REG_SUM_BOOL,ON_CONN_REG_SUM_INT,ON_CONN_REG_SUM_FLOAT]
+  on_rtde_feed_open(on_conn_ip,on_conn_rtde_feed_name,on_regStart_conn,on_regSum_conn,ON_REGISTERS_SPEEDL_FLOAT)
+  sync()
+  end
+  on_set_rtde_watchdog(updateHz=0.2)
+  sync()
+  on_dataProcess_thrd=run on_dataProcess_thread()
+  sync()
+  on_tcp_init_adapters()
+  on_payload_init_adapters()
+  on_tcp_init_primary()
+  on_payload_init_primary()
+  
+  on_tcp_update_custom()
+  on_tcp_set_actual_to(on_tcp_active_is_primary)
+  if(on_follow_tcp):
+  on_payload_set_actual()
+  end 
+  on_watchdog_thrd=run on_set_watchdog_thread()
+  sync()
+  def done_waiting_for_init(device_name,product_code,tool_index=0):
+  textmsg(str_cat(device_name,str_cat(str_cat("[",tool_index),"]: ")),product_code)
+  end
+  
+  #======    End of OnRobot Run    ======#
+  #======    OnRobot QC Start    ======#
+  
+  if(on_toolConnector):
+  tc_setup_tool()
+  end 
+  sync()
+  
+  #======    End of OnRobot QC Start    ======#
+  #======    OnRobot CB Run    ======#
+  
+  if(ON_REGISTERS_SPEEDL_FLOAT>0):
+  cb_dataRead_thrd=run cb_dataRead_thread()
+  sync()
+  end 
+  
+  #======    End of OnRobot CB Run    ======#
+  #======    OnRobot Eye Run    ======#
+  
+  sync()
+  sync()
+  sync()
+  sync()
+  sync()
+  
+  #======    End of OnRobot Eye Run    ======#
+  #======    OnRobot twofg Run    ======#
+  
+  def twofg_wait_for_init(tool_index):
+  local twofg_timeout=0
+  while not(twofg_product_code_arr[tool_index]==twofg_DEVICE_ID_twofg7):
+  sync()
+  twofg_timeout=twofg_timeout+1
+  if(twofg_timeout>ON_INIT_TIMEOUT):
+  popup(twofg_device_id_timeout,twofg_error_title,error=True,blocking=False)
+  halt
+  end 
+  end 
+  done_waiting_for_init("2FG",twofg_product_code_arr[tool_index],tool_index)
+  end 
+  twofg_dataRead_running=True
+  sync()
+  twofg_dataRead_thrd=run twofg_dataRead_thread()
+  sync()
+  textmsg(twofg_device_id_waiting)
+  if(twofg_index==ON_DI_DUAL):
+  twofg_wait_for_init(ON_DI_PRIMARY)
+  twofg_wait_for_init(ON_DI_SECONDARY)
+  else:
+  twofg_wait_for_init(twofg_index)
+  end 
+  sync()
+  twofg_dataProcess_running=True
+  sync()
+  twofg_dataProcess_thrd=run twofg_dataProcess_thread()
+  sync()
+  twofg_monitor_thread_handle=run twofg_monitor_thread()
+  sync()
+  
+  #======    End of OnRobot twofg Run    ======#
+  # end: URCap Installation Node
+  # begin: URCap Installation Node
+  #   Source: ros_as_a_service, 0.2.0, FZI Research Center for Information Technology
+  #   Type: Rosbridge adapter
+  # buffer for char quote as we can not put this explicitly in UR Script
+  quote = " "
+  
+  ### bool json_checkKeywordMatch(src="", target="", index=1)
+  ### check if a given name in src is a valid identifier
+  ### This is checked by testing for a prepositioned and a postpositioned quote + colcon
+  ### src: string in which to check if a target is a valid identifier
+  ### target: identifier key
+  ### index: position of first character of target in src, min value = 1
+  def json_checkKeywordMatch(src="", target="", index=1):
+    # check strings not empty
+    if (str_empty(target)):
+      textmsg("target empty!")
+      return False
+    end
+    if (str_empty(src)):
+      textmsg("src empty!")
+      return False
+    end
+    
+    # determin string lengths
+    src_length = str_len(src)
+    tgt_length = str_len(target)
+    
+    # check index in valid range
+    if (index <= 0):
+      textmsg("index to low!", index)
+      return False
+    end
+    if (index + tgt_length + 1 > src_length):
+      textmsg("index to high!", index)
+      return False
+    end
+    if (index >= 2 and str_at(src, index-2) == "\"):
+      textmsg("keyword is not valid due to escape sequence")
+      return False
+    end
+    if (index > 0 and str_at(src,index-1) != quote):
+      textmsg("keyword not headed by a quote!")
+      return False
+    end
+    if (str_at(src, index + tgt_length) != quote):
+      textmsg("keyword not followed by a quote!")
+      return False
+    end
+    if (str_at(src, index + tgt_length + 1) != ":"):
+      textmsg("keyword not followed by a colcon!")
+      return False
+    end
+  
+    return True
+  end
+  
+  ### int json_strFindFirstNotOf(src, target, start = 0)
+  ### find first character in src that is not in target
+  ### src: string in which to look for characters
+  ### target: string with allowed characters
+  ### start: first character to check in src
+  ### return position of first character not in target. if none is found return -1
+  def json_strFindFirstNotOf(src, target, start = 0):
+    position = start
+    while (position < str_len(src)):
+      a = str_at(src, position)
+      if (str_find(target, a) == -1):
+        return position
+      end
+      position = position + 1
+    end
+    return -1
+  end
+  
+  ### int json_findCorrespondingClosingContainer(src, open_sign, closing_sign, start=1)
+  ### with a defined character to open a container and one to close it look for the end of the container
+  ### src: string where to look for delimiters
+  ### open_sign: character to open a container
+  ### closing_sign: character to close a container
+  ### start: first character to check in src
+  ### return position of closing character in src. -1 if none is found
+  def json_findCorrespondingClosingContainer(src="", open_sign=" ", closing_sign=" ", start=1):
+    # textmsg("look for Closing Container. start: ", start)
+    # textmsg("opening: ", open_sign)
+    # textmsg("closing: ", closing_sign)
+    if (open_sign == quote):
+      position = start +1
+    else:
+      position = start
+    end
+    brace_count = 0
+    
+    while position < str_len(src):
+      if (str_at(src, position) == open_sign):
+        if(position == 0):
+          # textmsg("found an opening at ", position)
+          brace_count = brace_count + 1
+        elif (str_at(src, position -1) != "\"):
+          # textmsg("found an opening at ", position)
+          brace_count = brace_count + 1
+        end
+      end
+      
+      if (str_at(src, position) == closing_sign):
+        if (position == 0):
+          textmsg("start is closing delimiter!")
+          return 0
+        elif (str_at(src, position -1) != "\"):
+          # textmsg("found a closing at ", position)
+          brace_count = brace_count - 1
+        end
+        if (brace_count == 0):
+          # textmsg("found closing for the container at ", position)
+          return position
+        end
+      end
+      
+      position = position + 1
+    end
+    
+    textmsg("no closing container found for opening at ", start)
+    return -1
+  end
+  
+  ### int json_findCorrespondingDelimiter(src, start = 0)
+  ### Look for a following corresponding Delimiter in a Json string.
+  ### src: json string to evaluate
+  ### start: position of delimiter to look for a corresponding element
+  ### return: position of character closing the container
+  def json_findCorrespondingDelimiter(src, start = 0):
+    # textmsg("find corresponding delimiter. start ", start)
+    if (str_empty(src) == True):
+      textmsg("Cannot find a corresponding delimiter in empty string")
+      return -1
+    end
+    
+    local length = str_len(src)
+    local delimiter_start = str_at(src, start)
+    local delimiter_end = " "
+    
+    if (delimiter_start == quote):
+      delimiter_end = quote
+    elif (delimiter_start == "{"):
+      delimiter_end = "}"
+    elif (delimiter_start == "["):
+      delimiter_end = "]"
+    elif (delimiter_start == "("):
+      delimiter_end = ")"
+    else:
+      # boolean expressions and numbers without quotes
+      position = json_strFindFirstNotOf(src, "truefalsn0123456789.", start +1)
+      return position -1
+    end
+    
+    return json_findCorrespondingClosingContainer(src, delimiter_start, delimiter_end, start)
+  end
+  
+  ### int[4] json_getElement(inp_string, name)
+  ### return positions of an Element in a json string
+  ### inp_string: json to extract the element from
+  ### name: identifier of the element
+  ### return: [pos of quote before identifier, pos of quote after identifier, begin of value, end of value]
+  def json_getElement(inp_string="", name=""):
+    # check inputs not empty
+    if (str_empty(inp_string) == True):
+      textmsg("Can not evaluate empty json string. abort")
+      return [0, 0, 0, 0]
+    end
+    if (str_empty(name) == True):
+      textmsg("Empty json identifier to look for. abort")
+      return [0, 0, 0, 0]
+    end
+  
+    # determine actual length of inputs
+    local inp_length = str_len(inp_string)
+    local name_length = str_len(name)
+  
+    local element_begin = 0
+    local value_begin = 0
+    local element_end = 0
+    local index = 0
+  
+    # search for name and check it is a keyword
+    while (index < inp_length):
+      index = str_find(inp_string, name, element_begin)
+      if (json_checkKeywordMatch(inp_string, name, index) == True):
+        element_begin = index
+        break
+      end
+  
+      # return 0 if no valid identifier was found
+      if (index == -1):
+        return [0, 0, 0, 0]
+      end
+  
+      index = index + 1
+    end
+    
+    # set element_begin to quote before identifier, always valid as otherwise checkKeywordMatch fails
+    element_begin = element_begin - 1
+    
+    # set temporary element_end to end of identifier
+    element_end = element_begin + name_length + 2
+    
+    # search for begin of elements value
+    value_begin = json_strFindFirstNotOf(inp_string, ": ", element_end)
+    
+    # return 0 if no value found
+    if (value_begin == -1):
+      textmsg("did not find begin of value")
+      return [0, 0, 0, 0]
+    end
+    
+    # search end of value
+    element_end = json_findCorrespondingDelimiter(inp_string, value_begin)
+    
+    # return 0 if no valid end of value/element found
+    if (element_end == -1):
+      textmsg("did not find end of element")
+      return [0, 0, 0, 0]
+    end
+    
+    return [element_begin, element_begin + name_length + 1, value_begin, element_end]
+  end
+  
+  ### string json_reduceString(inp_string="", start=0, length=0)
+  ### get the string without a substring defined by start and length
+  ### inp_string: string that shall be reduced
+  ### start: index of first character of substring to be removed
+  ### length: length of substring to be removed
+  ### return: catenated string of residual strings before and behind substring
+  def json_reduceString(inp_string="", start=0, length=0):
+    local prefix = str_sub(inp_string, 0, start)
+    local postfix = str_sub(inp_string, start + length)
+    return str_cat(prefix, postfix)
+  end
+
+  ### string json_removeSurroundingQuotes(inp_string)
+  ### Remove surrounding " signs if present
+  ### return: input string if not the first and last characters are the quote character
+  def json_removeSurroundingQuotes(inp_string=""):
+    local len = str_len(inp_string)
+    if len < 1:
+      textmsg("json_removeSurroundingQuotes: Passed string is empty!")
+      return inp_string
+    end
+    if str_at(inp_string, 0) == quote:
+      if (str_at(inp_string, len - 1)) == quote:
+        return str_sub(inp_string, 1, len - 2)
+      end
+    end
+    return inp_string
+  end
+
+  # get quote for json parsing
+  def rosbridge_get_quote(remoteIP, remotePort):
+  quote_socket_connected = socket_open(remoteIP, remotePort, "quotesocket")
+  if (quote_socket_connected == False):
+    popup("Could not connect to rosbridge at " + remoteIP + ":" + to_str(remotePort) + ". Following ROS calls will not work! Check your connection setup and make sure the rosbridge is actually running.", "Connection failed", error=True, blocking=True)
+  end
+  socket_send_byte(123, "quotesocket")	# {
+  socket_send_byte(34, "quotesocket")	# "
+  socket_send_byte(111, "quotesocket")	# o
+  socket_send_byte(112, "quotesocket")	# p
+  socket_send_byte(34, "quotesocket")	# "
+  socket_send_byte(58, "quotesocket")	# :
+  socket_send_byte(34, "quotesocket")	# "
+  socket_send_byte(99, "quotesocket")	# c
+  socket_send_byte(97, "quotesocket")	# a
+  socket_send_byte(108, "quotesocket")	# l
+  socket_send_byte(108, "quotesocket")	# l
+  socket_send_byte(95, "quotesocket")	# _
+  socket_send_byte(115, "quotesocket")	# s
+  socket_send_byte(101, "quotesocket")	# e
+  socket_send_byte(114, "quotesocket")	# r
+  socket_send_byte(118, "quotesocket")	# v
+  socket_send_byte(105, "quotesocket")	# i
+  socket_send_byte(99, "quotesocket")	# c
+  socket_send_byte(101, "quotesocket")	# e
+  socket_send_byte(34, "quotesocket")	# "
+  socket_send_byte(44, "quotesocket")	# ,
+  socket_send_byte(32, "quotesocket")	#
+  socket_send_byte(34, "quotesocket")	# "
+  socket_send_byte(115, "quotesocket")	# s
+  socket_send_byte(101, "quotesocket")	# e
+  socket_send_byte(114, "quotesocket")	# r
+  socket_send_byte(118, "quotesocket")	# v
+  socket_send_byte(105, "quotesocket")	# i
+  socket_send_byte(99, "quotesocket")	# c
+  socket_send_byte(101, "quotesocket")	# e
+  socket_send_byte(34, "quotesocket")	# "
+  socket_send_byte(58, "quotesocket")	# :
+  socket_send_byte(34, "quotesocket")	# "
+  socket_send_byte(47, "quotesocket")	# /
+  socket_send_byte(114, "quotesocket")	# r
+  socket_send_byte(111, "quotesocket")	# o
+  socket_send_byte(115, "quotesocket")	# s
+  socket_send_byte(97, "quotesocket")	# a
+  socket_send_byte(112, "quotesocket")	# p
+  socket_send_byte(105, "quotesocket")	# i
+  socket_send_byte(47, "quotesocket")	# /
+  socket_send_byte(103, "quotesocket")	# g
+  socket_send_byte(101, "quotesocket")	# e
+  socket_send_byte(116, "quotesocket")	# t
+  socket_send_byte(95, "quotesocket")	# _
+  socket_send_byte(116, "quotesocket")	# t
+  socket_send_byte(105, "quotesocket")	# i
+  socket_send_byte(109, "quotesocket")	# m
+  socket_send_byte(101, "quotesocket")	# e
+  socket_send_byte(34, "quotesocket")	# "
+  socket_send_byte(125, "quotesocket")	# }
+  response = socket_read_string("quotesocket")
+  if (str_len(response) > 2):
+    textmsg(response)
+    quote = str_at(response, 1)
+    bounds = json_getElement(inp_string=response, name="result")
+    quote_result = str_sub(response, bounds[2], bounds[3]-bounds[2]+1)
+    if (quote_result != "true"):
+      popup("Parsing quote from rosbridge answer failed! Make sure that the rosbridge is actually running at " + remoteIP + ":" + to_str(remotePort) + ".", "Parsing quote char failed", error=True, blocking=True)
+    end
+  else:
+    popup("Could not receive quote char from rosbridge. Make sure that the rosbridge is actually running at " + remoteIP + ":" + to_str(remotePort) + ".", "Did not receive quote char", error=True, blocking=True)
+  end
+  socket_close("quotesocket")
+  end
+  # Action status to string
+  def goalStateString(state_num):
+  if (state_num == 0):
+    return "PENDING"
+  elif (state_num == 1):
+    return "ACTIVE"
+  elif (state_num == 2):
+    return "PREEMPTED"
+  elif (state_num == 3):
+    return "SUCCEEDED"
+  elif (state_num == 4):
+    return "ABORTED"
+  elif (state_num == 5):
+    return "REJECTED"
+  elif (state_num == 6):
+    return "PREEMPTING"
+  elif (state_num == 7):
+    return "RECALLING"
+  elif (state_num == 8):
+    return "RECALLED"
+  elif (state_num == 9):
+    return "LOST"
+  end
+  end
+  # end: URCap Installation Node
+  step_count_42638c13_3de5_4512_bac4_bbc729725b56 = 0.0
+  thread Step_Counter_Thread_bf4d5bea_6156_4d4e_ab83_5b5cc0f5d4f0():
+    while (True):
+      step_count_42638c13_3de5_4512_bac4_bbc729725b56 = step_count_42638c13_3de5_4512_bac4_bbc729725b56 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_bf4d5bea_6156_4d4e_ab83_5b5cc0f5d4f0()
+  global EyesPickAppr=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  global EyesPickPose=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  global EyesWorkpCount=-1
+  global EyesWorkpPose=p[0.0,0.0,0.0,0.0,0.0,0.0]
+  global EyesWorkpiece=-1
+  global Pallet_1_lct=1
+  global Pallet_1_lno=1
+  global Pallet_1_sep= False 
+  global Pallet_1_tct=1
+  global Pallet_2_lct=1
+  global Pallet_2_lno=1
+  global Pallet_2_sep= False 
+  global Pallet_2_tct=1
+  global Wait1_p=p[.374735562717, -.607924439210, .557819012561, -1.057011387053, 2.492554821995, -1.021351473715]
+  global Wait1_q=[-0.8277700583087366, -1.7467204533019007, -1.1659722328186035, -1.038805143242218, 1.5693888664245605, -0.06394035020937139]
+  global Detect_p=p[.280611679935, -.504639937794, .419472513312, -1.225465360076, 2.886028016332, -.022850148933]
+  global Detect_q=[-0.8280647436725062, -1.7491618595519007, -1.1685665845870972, -1.7791196308531703, 1.5695805549621582, -0.06379348436464483]
+  global Mid1_p=p[.386597022500, -.305444913502, .404702478498, -2.282476253198, 2.152145447595, -.021397175154]
+  global Mid1_q=[-0.3913491407977503, -1.5331482601216813, -1.439237356185913, -1.7259069881834925, 1.5677564144134521, -0.4533951918231409]
+  global Mid2_p=p[.386594891578, -.229267957159, .404710348387, 2.397850315718, -2.008809523846, .045004118920]
+  global Mid2_q=[-0.21642095247377569, -1.4205345672420044, -1.5417513847351074, -1.7308293781676234, 1.5433745384216309, -0.39591771761049444]
+  global PlaceStag_p=p[.212453166894, .356509688697, .316398379123, 2.884208170576, -1.226351862428, -.007047576604]
+  global PlaceStag_q=[1.3597254753112793, -1.3405332577279587, -1.824486494064331, -1.5541050520590325, 1.574336051940918, 0.589810848236084]
+  global Approach_p=p[.490823641236, -.018339430173, .249726320600, -2.875405220338, 1.195055700156, -.041322201311]
+  global Approach_q=[0.23664131048743908, -1.5294181035290864, -1.8471257792394518, -1.2984653599512468, 1.5756977707094961, -0.5498801897794294]
+  global ToolActionPoint_p=p[.490821170496, -.018345367370, .034428992030, -2.875424603350, 1.195044467852, -.041343523203]
+  global ToolActionPoint_q=[0.2362041473388663, -1.8188072643675737, -2.1702311038970983, -0.6860196751407077, 1.5771937370300306, -0.5504820982562455]
+  global Exit_1_p=p[.490820222270, -.018339241393, .249402797052, -2.875477524855, 1.194993608997, -.041288104538]
+  global Exit_1_q=[0.23664058649429975, -1.529593400244016, -1.8477625516020577, -1.2976533011603246, 1.5756993923223122, -0.5498814308847626]
+  global Approach_1_p=p[.397159042864, .138443722966, .249833787949, 1.189137394495, -2.884140310151, .012003215355]
+  global Approach_1_q=[0.6617471700122259, -1.381901823293049, -1.9593876196053195, -1.394504350173646, 1.567223722538582, 1.447106451980405]
+  global ToolActionPoi_1_p=p[.397157183301, .138448728516, .035733620114, 1.189144720793, -2.884114006611, .012007686193]
+  global ToolActionPoi_1_q=[0.6612046957015947, -1.6845852337279252, -2.315120458602909, -0.7360773843577801, 1.5687251091003496, 1.446206092834469]
+  global Exit_2_p=p[.397166329704, .138438587382, .250035668264, 1.189098625260, -2.884140253335, .012032944843]
+  global Exit_2_q=[0.6617477825240292, -1.381797304856633, -1.9589323315776035, -1.3950641573661944, 1.5672227116525672, 1.447107518713621]
+  $ 77 "Thread_2"
+  thread Thread_2():
+    while (True):
+      $ 78 "If ResetQube"
+      if (modbus_get_signal_status("ResetQube")):
+        $ 79 "CountCube=0"
+        CountCube=0
+      end
+      $ 80 "If ResetLine"
+      if (modbus_get_signal_status("ResetLine")):
+        $ 81 "CountLine=0"
+        CountLine=0
+      end
+      $ 82 "Wait: 0.01"
+      sleep(0.01)
+    end
+  end
+  threadId_Thread_2 = run Thread_2()
+  while (True):
+    $ 2 "Robot Program"
+    $ 3 "Set BoxPickedUp=0"
+    modbus_set_output_register("BoxPickedUp", 0)
+    $ 4 "MoveJ"
+    $ 5 "Wait1" "breakAfter"
+    movej(get_inverse_kin(Wait1_p, qnear=Wait1_q), a=1.3962634015954636, v=1.0471975511965976)
+    $ 6 "Wait Stop=LO"
+    while (modbus_get_signal_status("Stop") == True):
+      sync()
+    end
+    # begin: URCap Program Node
+    #   Source: OnRobot, 6.0.2, OnRobot A/S
+    #   Type: TCP
+    $ 7 "TCP"
+    on_tcp_set_actual_to(isPrimary = True)
+    on_tcp_offset_forced_set_actual(isPrimary = 0)
+    # end: URCap Program Node
+    # begin: URCap Program Node
+    #   Source: OnRobot, 6.0.2, OnRobot A/S
+    #   Type: 2FG Release
+    $ 8 "2FG Release (70)"
+on_return = twofg_release(width=70.0, speed=50, external_release=True, tool_index=0 )
+twofg_payload_set(mass = 0.0, tool_index = 0, use_guard = False)
+    # end: URCap Program Node
+    $ 9 "Wait BoxDetected=HI"
+    while (modbus_get_signal_status("BoxDetected") == False):
+      sync()
+    end
+    $ 10 "MoveJ"
+    $ 11 "Detect" "breakAfter"
+    movej(get_inverse_kin(Detect_p, qnear=Detect_q), a=1.3962634015954636, v=1.0471975511965976)
+    # begin: URCap Program Node
+    #   Source: OnRobot, 6.0.2, OnRobot A/S
+    #   Type: Eyes Locate
+    $ 12 "Eyes Locate"
+    eyes_cnt = 0
+    eyes_cnt = eyes_locate(1, -1)
+    if (eyes_cnt > 0):
+      eyes_workp_cnt = eyes_cnt
+      # begin: URCap Program Node
+      #   Source: OnRobot, 6.0.2, OnRobot A/S
+      #   Type: Eyes Get Workpiece
+      $ 13 "Eyes Get Workpiece" "noBreak"
+      eyes_workp_type = -1
+      eyes_workp_cnt = -1
+      eyes_workp_pose = p[0,0,0,0,0,0]
+      eyes_workp_pose = eyes_getworkpiecepose(0)
+      eyes_workp_type = eyes_getworkpiecetype()
+      eyes_workp_matc = eyes_getworkpiecematch()
+      eyes_workp_eval = eyes_getworkpieceeval()
+      eyes_workp_cnt = eyes_getworkpiececount()
+      if (eyes_workp_type != -1):
+        $ 14 "EyesWorkpCount≔eyes_workp_cnt" "noBreak"
+        global EyesWorkpCount=eyes_workp_cnt
+        $ 15 "EyesWorkpPose≔eyes_workp_pose" "noBreak"
+        global EyesWorkpPose=eyes_workp_pose
+        $ 16 "EyesWorkpiece≔eyes_workp_type" "noBreak"
+        global EyesWorkpiece=eyes_workp_type
+        $ 17 "Commands" "noBreak"
+        # begin: URCap Program Node
+        #   Source: OnRobot, 6.0.2, OnRobot A/S
+        #   Type: Eyes Pick
+        $ 18 "Eyes Pick" "noBreak"
+        if (pose_dist(EyesWorkpPose, p[0,0,0,0,0,0]) > 0.005):
+          global EyesPickPose=EyesWorkpPose
+          global EyesPickAppr=pose_trans(EyesWorkpPose, p[0,0, -0.1,0,0,0])
+          # begin: URCap Program Node
+          #   Source: OnRobot, 6.0.2, OnRobot A/S
+          #   Type: TCP
+          $ 19 "TCP" "noBreak"
+          on_tcp_set_actual_to(isPrimary = True)
+          on_tcp_offset_forced_set_actual(isPrimary = 0)
+          # end: URCap Program Node
+          $ 20 "MoveJ" "noBreak"
+          $ 21 "EyesPickAppr" "noBreak"
+          set_tcp(p[0.0,0.0,0.1506,0.0,0.0,0.0])
+          movej(EyesPickAppr, a=1.3962634015954636, v=1.0471975511965976)
+          $ 22 "MoveL" "noBreak"
+          $ 23 "EyesPickPose" "noBreak"
+          set_tcp(p[0.0,0.0,0.1506,0.0,0.0,0.0])
+          movel(EyesPickPose, a=1.2, v=0.25)
+          # begin: URCap Program Node
+          #   Source: OnRobot, 6.0.2, OnRobot A/S
+          #   Type: 2FG Grip
+          $ 24 "2FG Grip (45)" "noBreak"
+on_return = twofg_grip(width=45.0, force=50, speed=100, external_grip=True, tool_index=0)
+twofg_payload_set(mass = 0.0, tool_index = 0, use_guard = True)
+          # end: URCap Program Node
+          $ 25 "MoveL" "noBreak"
+          $ 26 "EyesPickAppr" "noBreak"
+          set_tcp(p[0.0,0.0,0.1506,0.0,0.0,0.0])
+          movel(EyesPickAppr, a=1.2, v=0.25)
+          $ 27 "MoveJ" "noBreak"
+          $ 28 "Mid1" "noBreak"
+          movej(get_inverse_kin(Mid1_p, qnear=Mid1_q), a=1.3962634015954636, v=1.0471975511965976)
+          $ 29 "Set BoxPickedUp=1" "noBreak"
+          modbus_set_output_register("BoxPickedUp", 1)
+          $ 30 "MoveJ" "noBreak"
+          $ 31 "Mid2" "noBreak"
+          movej(get_inverse_kin(Mid2_p, qnear=Mid2_q), a=1.3962634015954636, v=1.0471975511965976)
+          $ 32 "Set BoxPickedUp=0" "noBreak"
+          modbus_set_output_register("BoxPickedUp", 0)
+          $ 33 "If StackStag" "noBreak"
+          if (modbus_get_signal_status("StackStag")):
+            $ 34 "MoveJ" "noBreak"
+            $ 35 "PlaceStag" "noBreak"
+            movej(get_inverse_kin(PlaceStag_p, qnear=PlaceStag_q), a=1.3962634015954636, v=1.0471975511965976)
+            # begin: URCap Program Node
+            #   Source: OnRobot, 6.0.2, OnRobot A/S
+            #   Type: 2FG Release
+            $ 36 "2FG Release (70)" "noBreak"
+on_return = twofg_release(width=70.0, speed=50, external_release=True, tool_index=0 )
+twofg_payload_set(mass = 0.0, tool_index = 0, use_guard = False)
+            # end: URCap Program Node
+          else:
+            $ 37 "ElseIf StackQube" "noBreak"
+            if (modbus_get_signal_status("StackQube")):
+              $ 38 "MoveJ" "noBreak"
+              $ 39 "PalletQube" "noBreak"
+              def PalletQube_trans(pose):
+              return p[pose[0], pose[1], pose[2], 0, 0, 0]
+            end
+            def PalletQube_rot(pose):
+            return p[0, 0, 0, pose[3], pose[4], pose[5]]
+          end
+          def PalletQube_compute_pallet_waypoint(T_base_feature_taught, T_feature_referencePoint_taught, T_referencePoint_approach_taught, T_base_feature, T_base_referencePoint):
+          local trans_referencePoint_approach_in_feature_taught = pose_sub(PalletQube_trans(pose_trans(T_feature_referencePoint_taught, T_referencePoint_approach_taught)), PalletQube_trans(T_feature_referencePoint_taught))
+          local rot_referencePoint_approach_in_feature_taught = pose_trans(PalletQube_rot(T_feature_referencePoint_taught), pose_trans(PalletQube_rot(T_referencePoint_approach_taught), pose_inv(PalletQube_rot(T_feature_referencePoint_taught))))
+          T_feature_referencePoint = pose_trans(pose_inv(T_base_feature), T_base_referencePoint)
+          rot_referencePoint_approach = pose_trans(pose_inv(PalletQube_rot(T_feature_referencePoint)), pose_trans(rot_referencePoint_approach_in_feature_taught, PalletQube_rot(T_feature_referencePoint)))
+          T_feature_approach = pose_trans(trans_referencePoint_approach_in_feature_taught, pose_trans(T_feature_referencePoint, rot_referencePoint_approach))
+          T_base_approach = pose_trans(T_base_feature, T_feature_approach)
+          return T_base_approach
+        end
+        Pallet_1_tct = 12
+        if (CountCube > 12 or CountCube < 1):
+          CountCube = 1
+        end
+        $ 40 "Patterns" "noBreak"
+        $ 41 "Grid_Pattern_1" "noBreak"
+        $ 46 "Layers" "noBreak"
+        if (CountCube < 5):
+          Pallet_1_lno = 1
+          Pallet_1_lct = CountCube
+          global CornerItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.490821170496, -.018345367370, .034428992030, -2.875424603350, 1.195044467850, -.041343523209]))
+          global CornerItem_2=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.442739927778, .029061146469, .035076562900, -2.892378987723, 1.185157124907, -.009418095003]))
+          global CornerItem_3=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.406596716187, -.008656245684, .035766483699, -2.886845997972, 1.162775681569, -.046997274208]))
+          global CornerItem_4=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.455401553060, -.055647939276, .034776219241, 2.905068327780, -1.154792740136, .029992530650]))
+          CountCube_x = (Pallet_1_lct - 1) % 2
+          CountCube_y = floor((Pallet_1_lct - 1) / 2)
+          referencePoint = interpolate_pose(interpolate_pose(CornerItem_1, CornerItem_2, CountCube_x/1), interpolate_pose(CornerItem_4, CornerItem_3,CountCube_x/1), CountCube_y/1)
+          direction = p[0,0,1,0,0,0]
+          referencePoint = pose_add (referencePoint,p[0.0*direction[0],0.0*direction[1],0.0*direction[2],0,0,0])
+        elif (CountCube < 9):
+          Pallet_1_lno = 2
+          Pallet_1_lct = CountCube - 4
+          global CornerItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.490821170496, -.018345367370, .034428992030, -2.875424603350, 1.195044467850, -.041343523209]))
+          global CornerItem_2=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.442739927778, .029061146469, .035076562900, -2.892378987723, 1.185157124907, -.009418095003]))
+          global CornerItem_3=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.406596716187, -.008656245684, .035766483699, -2.886845997972, 1.162775681569, -.046997274208]))
+          global CornerItem_4=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.455401553060, -.055647939276, .034776219241, 2.905068327780, -1.154792740136, .029992530650]))
+          CountCube_x = (Pallet_1_lct - 1) % 2
+          CountCube_y = floor((Pallet_1_lct - 1) / 2)
+          referencePoint = interpolate_pose(interpolate_pose(CornerItem_1, CornerItem_2, CountCube_x/1), interpolate_pose(CornerItem_4, CornerItem_3,CountCube_x/1), CountCube_y/1)
+          direction = p[0,0,1,0,0,0]
+          referencePoint = pose_add (referencePoint,p[0.05*direction[0],0.05*direction[1],0.05*direction[2],0,0,0])
+        elif (CountCube < 13):
+          Pallet_1_lno = 3
+          Pallet_1_lct = CountCube - 8
+          global CornerItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.490821170496, -.018345367370, .034428992030, -2.875424603350, 1.195044467850, -.041343523209]))
+          global CornerItem_2=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.442739927778, .029061146469, .035076562900, -2.892378987723, 1.185157124907, -.009418095003]))
+          global CornerItem_3=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.406596716187, -.008656245684, .035766483699, -2.886845997972, 1.162775681569, -.046997274208]))
+          global CornerItem_4=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.455401553060, -.055647939276, .034776219241, 2.905068327780, -1.154792740136, .029992530650]))
+          CountCube_x = (Pallet_1_lct - 1) % 2
+          CountCube_y = floor((Pallet_1_lct - 1) / 2)
+          referencePoint = interpolate_pose(interpolate_pose(CornerItem_1, CornerItem_2, CountCube_x/1), interpolate_pose(CornerItem_4, CornerItem_3,CountCube_x/1), CountCube_y/1)
+          direction = p[0,0,1,0,0,0]
+          referencePoint = pose_add (referencePoint,p[0.1*direction[0],0.1*direction[1],0.1*direction[2],0,0,0])
+        end
+        Approach_p = PalletQube_compute_pallet_waypoint(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(pose_inv(p[0.0,0.0,0.0,0.0,0.0,0.0]), p[0.49082117049561713,-0.018345367369810434,0.034428992029555766,-2.875424603350005,1.1950444678496563,-0.04134352320876538]), p[0.0030075878213051133,-0.007654711441588136,-0.21514018578405134,7.514815505220049E-6,-1.765285393097554E-5,1.1806049284145296E-5], p[0.0,0.0,0.0,0.0,0.0,0.0], referencePoint)
+        Approach_p = pose_trans(p[0.49082117049561713,-0.018345367369810434,0.034428992029555766,-2.8754246033500044,1.1950444678496566,-0.04134352320877124], pose_trans(pose_inv(referencePoint), Approach_p))
+        ToolActionPoint_p = PalletQube_compute_pallet_waypoint(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(pose_inv(p[0.0,0.0,0.0,0.0,0.0,0.0]), p[0.49082117049561713,-0.018345367369810434,0.034428992029555766,-2.875424603350005,1.1950444678496563,-0.04134352320876538]), p[0.0,-5.551115123125783E-17,0.0,0.0,0.0,0.0], p[0.0,0.0,0.0,0.0,0.0,0.0], referencePoint)
+        ToolActionPoint_p = pose_trans(p[0.49082117049561713,-0.018345367369810434,0.034428992029555766,-2.8754246033500044,1.1950444678496566,-0.04134352320877124], pose_trans(pose_inv(referencePoint), ToolActionPoint_p))
+        Exit_1_p = PalletQube_compute_pallet_waypoint(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(pose_inv(p[0.0,0.0,0.0,0.0,0.0,0.0]), p[0.49082117049561713,-0.018345367369810434,0.034428992029555766,-2.875424603350005,1.1950444678496563,-0.04134352320876538]), p[0.003000519855628603,-0.007640929696554666,-0.2148170150577751,-3.9875283247140214E-5,-2.2872560801615802E-5,-4.308160517857609E-5], p[0.0,0.0,0.0,0.0,0.0,0.0], referencePoint)
+        Exit_1_p = pose_trans(p[0.49082117049561713,-0.018345367369810434,0.034428992029555766,-2.8754246033500044,1.1950444678496566,-0.04134352320877124], pose_trans(pose_inv(referencePoint), Exit_1_p))
+        $ 47 "At Each Item" "noBreak"
+        $ 48 "Generated Movements" "noBreak"
+        $ 49 "MoveJ" "noBreak"
+        $ 50 "Approach" "noBreak"
+        movej(get_inverse_kin(pose_trans(referencePoint, pose_trans(p[-.359603204626, .335867901220, .017481920834, 2.875424603350, -1.195044467850, .041343523209], Approach_p)), qnear=Approach_q), a=1.3962634015954636, v=1.0471975511965976)
+        $ 51 "MoveL" "noBreak"
+        $ 52 "ToolActionPoint" "noBreak"
+        movel(pose_trans(referencePoint, pose_trans(p[-.359603204626, .335867901220, .017481920834, 2.875424603350, -1.195044467850, .041343523209], ToolActionPoint_p)), a=1.2, v=0.25)
+        $ 53 "Tool action" "noBreak"
+        # begin: URCap Program Node
+        #   Source: OnRobot, 6.0.2, OnRobot A/S
+        #   Type: 2FG Release
+        $ 54 "2FG Release (70)" "noBreak"
+on_return = twofg_release(width=70.0, speed=50, external_release=True, tool_index=0 )
+twofg_payload_set(mass = 0.0, tool_index = 0, use_guard = False)
+        # end: URCap Program Node
+        $ 55 "MoveL" "noBreak"
+        $ 56 "Exit_1" "noBreak"
+        movel(pose_trans(referencePoint, pose_trans(p[-.359603204626, .335867901220, .017481920834, 2.875424603350, -1.195044467850, .041343523209], Exit_1_p)), a=1.2, v=0.25)
+        Pallet_1_sep = False
+        if (CountCube >= 12):
+          CountCube = 1
+        else:
+          CountCube = CountCube + 1
+        end
+      else:
+        $ 57 "ElseIf StackLine" "noBreak"
+        if (modbus_get_signal_status("StackLine")):
+          $ 58 "MoveJ" "noBreak"
+          $ 59 "PalletLine" "noBreak"
+          def PalletLine_trans(pose):
+          return p[pose[0], pose[1], pose[2], 0, 0, 0]
+        end
+        def PalletLine_rot(pose):
+        return p[0, 0, 0, pose[3], pose[4], pose[5]]
+      end
+      def PalletLine_compute_pallet_waypoint(T_base_feature_taught, T_feature_referencePoint_taught, T_referencePoint_approach_taught, T_base_feature, T_base_referencePoint):
+      local trans_referencePoint_approach_in_feature_taught = pose_sub(PalletLine_trans(pose_trans(T_feature_referencePoint_taught, T_referencePoint_approach_taught)), PalletLine_trans(T_feature_referencePoint_taught))
+      local rot_referencePoint_approach_in_feature_taught = pose_trans(PalletLine_rot(T_feature_referencePoint_taught), pose_trans(PalletLine_rot(T_referencePoint_approach_taught), pose_inv(PalletLine_rot(T_feature_referencePoint_taught))))
+      T_feature_referencePoint = pose_trans(pose_inv(T_base_feature), T_base_referencePoint)
+      rot_referencePoint_approach = pose_trans(pose_inv(PalletLine_rot(T_feature_referencePoint)), pose_trans(rot_referencePoint_approach_in_feature_taught, PalletLine_rot(T_feature_referencePoint)))
+      T_feature_approach = pose_trans(trans_referencePoint_approach_in_feature_taught, pose_trans(T_feature_referencePoint, rot_referencePoint_approach))
+      T_base_approach = pose_trans(T_base_feature, T_feature_approach)
+      return T_base_approach
+    end
+    Pallet_2_tct = 9
+    if (CountLine > 9 or CountLine < 1):
+      CountLine = 1
+    end
+    $ 60 "Patterns" "noBreak"
+    $ 61 "Line_Pattern_1" "noBreak"
+    $ 64 "Layers" "noBreak"
+    if (CountLine < 4):
+      Pallet_2_lno = 1
+      Pallet_2_lct = CountLine
+      global StartItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.397157183301, .138448728516, .035733620114, 1.189144720793, -2.884114006611, .012007686193]))
+      global EndItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.312280284634, .223473244316, .035373316963, -1.167052015756, 2.915881423829, -.028457656742]))
+      referencePoin_2 = interpolate_pose(StartItem_1, EndItem_1, (Pallet_2_lct - 1)/2)
+      direction = p[0,0,1,0,0,0]
+      referencePoin_2 = pose_add (referencePoin_2,p[0.0*direction[0],0.0*direction[1],0.0*direction[2],0,0,0])
+    elif (CountLine < 7):
+      Pallet_2_lno = 2
+      Pallet_2_lct = CountLine - 3
+      global StartItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.397157183301, .138448728516, .035733620114, 1.189144720793, -2.884114006611, .012007686193]))
+      global EndItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.312280284634, .223473244316, .035373316963, -1.167052015756, 2.915881423829, -.028457656742]))
+      referencePoin_2 = interpolate_pose(StartItem_1, EndItem_1, (Pallet_2_lct - 1)/2)
+      direction = p[0,0,1,0,0,0]
+      referencePoin_2 = pose_add (referencePoin_2,p[0.05*direction[0],0.05*direction[1],0.05*direction[2],0,0,0])
+    elif (CountLine < 10):
+      Pallet_2_lno = 3
+      Pallet_2_lct = CountLine - 6
+      global StartItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.397157183301, .138448728516, .035733620114, 1.189144720793, -2.884114006611, .012007686193]))
+      global EndItem_1=pose_trans(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(p[-.000000000000, -.000000000000, -.000000000000, .000000000000, .000000000000, .000000000000], p[.312280284634, .223473244316, .035373316963, -1.167052015756, 2.915881423829, -.028457656742]))
+      referencePoin_2 = interpolate_pose(StartItem_1, EndItem_1, (Pallet_2_lct - 1)/2)
+      direction = p[0,0,1,0,0,0]
+      referencePoin_2 = pose_add (referencePoin_2,p[0.1*direction[0],0.1*direction[1],0.1*direction[2],0,0,0])
+    end
+    Approach_1_p = PalletLine_compute_pallet_waypoint(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(pose_inv(p[0.0,0.0,0.0,0.0,0.0,0.0]), p[0.3971571833014898,0.13844872851588275,0.03573362011379949,1.189144720793193,-2.8841140066112247,0.012007686192969925]), p[0.004969839313878233,2.6081135519101517E-4,-0.21404231957806524,5.374758112618408E-6,-2.1003162449073906E-5,1.0819415360759607E-5], p[0.0,0.0,0.0,0.0,0.0,0.0], referencePoin_2)
+    Approach_1_p = pose_trans(p[0.3971571833014898,0.13844872851588275,0.03573362011379949,1.1891447207932004,-2.8841140066112434,0.012007686192967135], pose_trans(pose_inv(referencePoin_2), Approach_1_p))
+    ToolActionPoi_1_p = PalletLine_compute_pallet_waypoint(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(pose_inv(p[0.0,0.0,0.0,0.0,0.0,0.0]), p[0.3971571833014898,0.13844872851588275,0.03573362011379949,1.189144720793193,-2.8841140066112247,0.012007686192969925]), p[5.551115123125783E-17,5.551115123125783E-17,-2.7755575615628914E-17,0.0,0.0,0.0], p[0.0,0.0,0.0,0.0,0.0,0.0], referencePoin_2)
+    ToolActionPoi_1_p = pose_trans(p[0.3971571833014898,0.13844872851588275,0.03573362011379949,1.1891447207932004,-2.8841140066112434,0.012007686192967135], pose_trans(pose_inv(referencePoin_2), ToolActionPoi_1_p))
+    Exit_2_p = PalletLine_compute_pallet_waypoint(p[0.0,0.0,0.0,0.0,0.0,0.0], pose_trans(pose_inv(p[0.0,0.0,0.0,0.0,0.0,0.0]), p[0.3971571833014898,0.13844872851588275,0.03573362011379949,1.189144720793193,-2.8841140066112247,0.012007686192969925]), p[0.004972974213865555,2.5228291052825647E-4,-0.2142441922399787,1.715077682511436E-5,-1.3419958332393528E-7,3.3933503606538506E-5], p[0.0,0.0,0.0,0.0,0.0,0.0], referencePoin_2)
+    Exit_2_p = pose_trans(p[0.3971571833014898,0.13844872851588275,0.03573362011379949,1.1891447207932004,-2.8841140066112434,0.012007686192967135], pose_trans(pose_inv(referencePoin_2), Exit_2_p))
+    $ 65 "At Each Item" "noBreak"
+    $ 66 "Generated Movements" "noBreak"
+    $ 67 "MoveJ" "noBreak"
+    $ 68 "Approach_1" "noBreak"
+    movej(get_inverse_kin(pose_trans(referencePoin_2, pose_trans(p[.378390056612, .181651078175, .044750655163, -1.189144720793, 2.884114006611, -.012007686193], Approach_1_p)), qnear=Approach_1_q), a=1.3962634015954636, v=1.0471975511965976)
+    $ 69 "MoveL" "noBreak"
+    $ 70 "ToolActionPoi_1" "noBreak"
+    movel(pose_trans(referencePoin_2, pose_trans(p[.378390056612, .181651078175, .044750655163, -1.189144720793, 2.884114006611, -.012007686193], ToolActionPoi_1_p)), a=1.2, v=0.25)
+    $ 71 "Tool action" "noBreak"
+    # begin: URCap Program Node
+    #   Source: OnRobot, 6.0.2, OnRobot A/S
+    #   Type: 2FG Release
+    $ 72 "2FG Release (70)" "noBreak"
+on_return = twofg_release(width=70.0, speed=50, external_release=True, tool_index=0 )
+twofg_payload_set(mass = 0.0, tool_index = 0, use_guard = False)
+    # end: URCap Program Node
+    $ 73 "MoveL" "noBreak"
+    $ 74 "Exit_2" "noBreak"
+    movel(pose_trans(referencePoin_2, pose_trans(p[.378390056612, .181651078175, .044750655163, -1.189144720793, 2.884114006611, -.012007686193], Exit_2_p)), a=1.2, v=0.25)
+    Pallet_2_sep = False
+    if (CountLine >= 9):
+      CountLine = 1
+    else:
+      CountLine = CountLine + 1
+    end
+  end
+  end
+  end
+  $ 75 "MoveJ" "noBreak"
+  $ 76 "Mid2" "noBreak"
+  movej(get_inverse_kin(Mid2_p, qnear=Mid2_q), a=1.3962634015954636, v=1.0471975511965976)
+  end
+  # end: URCap Program Node
+  end
+  # end: URCap Program Node
+  end
+  # end: URCap Program Node
+  end
+end

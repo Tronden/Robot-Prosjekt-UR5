@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Symbolconfiguration xmlns="http://www.3s-software.com/schemas/Symbolconfiguration.xsd">
+  <Header>
+    <Version>3.5.14.0</Version>
+    <SymbolConfigObject version="4.4.0.0" runtimeid="3.5.18.4" libversion="4.4.0.0" compiler="3.5.19.0" lmm="3.5.19.0" profile="CODESYS V3.5 SP19+" settings="SupportOPCUA, LayoutCalculator=OptimizedClientSideLayoutCalculator" />
+    <ProjectInfo name="UR med samleband" devicename="Device" appname="Application" />
+  </Header>
+  <TypeList>
+    <TypeSimple name="T_BOOL" size="1" swapsize="0" typeclass="Bool" iecname="BOOL" />
+    <TypeSimple name="T_DINT" size="4" swapsize="4" typeclass="DInt" iecname="DINT" />
+    <TypeSimple name="T_INT" size="2" swapsize="2" typeclass="Int" iecname="INT" />
+  </TypeList>
+  <NodeList>
+    <Node name="Application">
+      <Node name="GVL">
+        <Node name="BandTargetSpeed" type="T_DINT" access="ReadWrite" />
+        <Node name="HMIBandFaster" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMIBandSlower" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMICountLine" type="T_INT" access="ReadWrite" />
+        <Node name="HMICountQube" type="T_INT" access="ReadWrite" />
+        <Node name="HMICountStag" type="T_INT" access="ReadWrite" />
+        <Node name="HMIResetAllCountersKnapp" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMIResetCountKnapp" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMIRunning" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMIStackLineKnapp" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMIStackQubeKnapp" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMIStackStagKnapp" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMIStart" type="T_BOOL" access="ReadWrite" />
+        <Node name="HMIStop" type="T_BOOL" access="ReadWrite" />
+        <Node name="RobotStackLine" type="T_BOOL" access="ReadWrite" />
+        <Node name="RobotStackQube" type="T_BOOL" access="ReadWrite" />
+        <Node name="RobotStackStag" type="T_BOOL" access="ReadWrite" />
+      </Node>
+    </Node>
+  </NodeList>
+</Symbolconfiguration>

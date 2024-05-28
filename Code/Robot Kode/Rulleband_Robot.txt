@@ -1,0 +1,83 @@
+ Program
+   Variables Setup
+   Robot Program
+     Set BoxPickedUp=0
+     MoveJ
+       Wait1
+     Wait Stop=LO
+     TCP
+     2FG Release (70)
+     Wait BoxDetected=HI
+     MoveJ
+       Detect
+     Eyes Locate
+       Eyes Get Workpiece
+         EyesWorkpCount≔eyes_workp_cnt
+         EyesWorkpPose≔eyes_workp_pose
+         EyesWorkpiece≔eyes_workp_type
+         Commands
+           Eyes Pick
+             TCP
+             MoveJ
+               EyesPickAppr
+             MoveL
+               EyesPickPose
+             2FG Grip (45)
+             MoveL
+               EyesPickAppr
+               MoveJ
+                 Mid1
+                 Set BoxPickedUp=1
+               MoveJ
+                 Mid2
+                 Set BoxPickedUp=0
+               If StackStag
+                 MoveJ
+                   PlaceStag
+                   2FG Release (70)
+               ElseIf StackQube
+                 MoveJ
+                   PalletQube
+                     Patterns
+                       Grid_Pattern_1
+                         CornerItem_1
+                         CornerItem_2
+                         CornerItem_3
+                         CornerItem_4
+                     Layers
+                     At Each Item
+                       Generated Movements
+                         MoveJ
+                           Approach
+                         MoveL
+                           ToolActionPoint
+                         Tool action
+                           2FG Release (70)
+                         MoveL
+                           Exit_1
+               ElseIf StackLine
+                 MoveJ
+                   PalletLine
+                     Patterns
+                       Line_Pattern_1
+                         StartItem_1
+                         EndItem_1
+                     Layers
+                     At Each Item
+                       Generated Movements
+                         MoveJ
+                           Approach_1
+                         MoveL
+                           ToolActionPoi_1
+                         Tool action
+                           2FG Release (70)
+                         MoveL
+                           Exit_2
+               MoveJ
+                 Mid2
+   Thread_2
+     If ResetQube
+       CountCube=0
+     If ResetLine
+       CountLine=0
+     Wait: 0.01
